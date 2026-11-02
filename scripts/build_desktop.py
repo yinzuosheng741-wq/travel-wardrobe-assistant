@@ -24,6 +24,8 @@ def copy_user_guides(output: Path):
 
 
 def main():
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="backslashreplace")
     output = ROOT / "dist/native" / APP_NAME
     if any((output / name).exists() for name in ("data/stylemate.db", "data/config/services.env", ".env")):
         raise RuntimeError("分发目录已有个人数据，请先备份并移走旧分发目录。")
