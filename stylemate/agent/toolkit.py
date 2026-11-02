@@ -23,6 +23,7 @@ from stylemate.agent.tools import wardrobe as wardrobe_tools
 from stylemate.agent.tools.write_actions import ActionPreparationError
 from stylemate.agent.write_toolkit import WriteActionToolkit, build_write_action_toolkit
 from stylemate.domain.models import AgentTraceStep, ToolSpec
+from stylemate.rag.question import current_question
 
 _TOOL_DESCRIPTIONS = {
     "get_user_location": "获取当前用户所在城市；没有城市参数。",
@@ -72,6 +73,7 @@ def build_toolkit(
         weather_client,
         settings,
         conversation_id,
+        current_question(owner_id, conversation_id),
     )
     executor = ToolExecutor()
     writes = build_write_action_toolkit(

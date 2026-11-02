@@ -16,6 +16,8 @@ from stylemate.agent.routing import route_skills
 from stylemate.agent.state import AgentState, model_messages
 from stylemate.agent.telemetry import record_counter
 from stylemate.agent.tool_results import error_payload
+from stylemate.rag.question import QuestionContext, current_question, question_scope
+from stylemate.rag.support import evidence_text
 
 logger = logging.getLogger(__name__)
 
@@ -57,6 +59,21 @@ def build_agent_graph(model, tools: list[BaseTool]):
                     "id": "material-clarification",
                 }])]}
             return {"messages": [AIMessage(content=clarification)]}
+        # Material/product guards are executable boundaries. A second model
+        # response cannot turn missing evidence or a rejected operation into a
+        # permission. Care facts are rendered literally with scope and URLs.
+        for message in reversed(state.get("messages", [])):
+            if getattr(message, "type", "") == "human":
+                break
+            if isinstance(message, ToolMessage) and message.name in {"care_guide", "rag_search"}:
+                try:
+                    data = json.loads(str(message.content)).get("result", {})
+                except (ValueError, TypeError):
+                    continue
+                if isinstance(data, dict) and data.get("support_status") and (
+                    data.get("care_boundary") or data["support_status"] != "supported"
+                ):
+                    return {"messages": [AIMessage(content=evidence_text(data))]}
         if (
             state.get("model_calls", 0) >= MAX_MODEL_CALLS
             or state.get("tool_calls", 0) >= MAX_TOOL_CALLS
@@ -108,7 +125,10 @@ def build_agent_graph(model, tools: list[BaseTool]):
                 raw = {"result": {"message": "不支持该工具。"}, "trace": {"name": name or "unknown", "status": "failed", "summary": "unknown tool", "duration_ms": 0}}
             else:
                 try:
-                    raw = json.loads(tool.invoke(args))
+                    owner, thread = state.get("owner_id", ""), state.get("conversation_id", "")
+                    question = current_question(owner, thread) or QuestionContext(owner, thread, state.get("original_query", ""))
+                    with question_scope(question):
+                        raw = json.loads(tool.invoke(args))
                 except Exception:
                     raw = {"result": {"message": "工具暂时不可用。"}, "trace": {"name": name, "status": "failed", "summary": "tool invocation failed", "duration_ms": 0}}
             trace = raw.get("trace")

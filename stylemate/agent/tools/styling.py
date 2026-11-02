@@ -17,6 +17,7 @@ from stylemate.agent.tool_schemas import (
     WeatherArguments,
 )
 from stylemate.rag.query_planning import material_clarification
+from stylemate.rag.question import current_question
 from stylemate.rules.guidance import outfit_categories
 from stylemate.skills.knowledge_qa import KnowledgeQASkill, KnowledgeQuery
 
@@ -72,9 +73,11 @@ def recommend_size(arguments: dict[str, Any], context: ToolContext) -> dict[str,
 def care_guide(arguments: dict[str, Any], context: ToolContext) -> dict[str, Any]:
     """Find care guidance through RAG and retain each source citation."""
     material = CareArguments.model_validate(arguments).material
-    clarification = material_clarification(material)
+    question = current_question(context.owner_id, context.conversation_id) or context.question
+    clarification = material_clarification(question.constraint_query if question else material, explicit_material=True)
     if clarification:
         return {"query": material, "answer_status": "needs_clarification", "message": clarification,
+                "support_status": "needs_clarification", "care_boundary": True,
                 "missing_conditions": ["material_or_care_label"], "results": [], "sources": []}
     return _rag_result(f"{material} 衣物洗护注意事项", context)
 
@@ -239,6 +242,7 @@ def _rag_result(query: str, context: ToolContext) -> dict[str, Any]:
         context.owner_id,
         context.conversation_id,
         KnowledgeQuery(query=query, top_k=top_k),
+        question=current_question(context.owner_id, context.conversation_id) or context.question,
     )
     return {
         **outcome.data,

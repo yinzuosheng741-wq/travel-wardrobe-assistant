@@ -8,7 +8,9 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from stylemate.domain.models import SkillOutcome, SkillSpec
 from stylemate.rag.models import RetrievalHit
-from stylemate.rag.query_planning import knowledge_compatible, requests_exact_product_measurement
+from stylemate.rag.query_planning import knowledge_compatible, material_subjects
+from stylemate.rag.question import QuestionContext
+from stylemate.rag.support import CARE, SupportDecision, support_decision
 from stylemate.skills.runtime import SkillRun
 
 
@@ -38,18 +40,26 @@ class KnowledgeQASkill:
         owner_id: str,
         conversation_id: str,
         request: KnowledgeQuery,
+        *,
+        question: QuestionContext | None = None,
     ) -> SkillOutcome:
         run = SkillRun(self.spec, request, trace_name="KnowledgeQASkill")
         request = run.request
-        query = _normalize_query(request.query)
+        if question and (question.owner_id, question.conversation_id) != (owner_id, conversation_id):
+            raise ValueError("question_identity_mismatch")
+        original = question.constraint_query if question else request.query
+        care = bool(CARE.search(original) or CARE.search(request.query))
+        # A compact material argument must not erase the requested operation.
+        # Trusted text already receives bounded lexical expansion in retrieval.
+        query = _normalize_query(original if question else request.query)
         with run.step("hybrid_retrieval") as step:
             hits = self.retriever.search(query, owner_id, conversation_id, top_k=request.top_k) if self.retriever else []
             if not hits:
                 step.status = "fallback"
         if self.retriever is None:
-            return self._outcome(request.query, query, [], run, attempts=0, rewritten=False)
+            return self._outcome(original, query, [], run, attempts=0, rewritten=False, care=care, question=question)
         with run.step("source_validation") as step:
-            valid_hits = _valid_cited_hits(hits, request.query)
+            valid_hits = _valid_cited_hits(hits, original)
             if not valid_hits:
                 step.status = "fallback"
         attempts = 1
@@ -61,11 +71,11 @@ class KnowledgeQASkill:
             with run.step("query_rewrite") as step:
                 effective_query = _rewrite_query(query)
                 retry_hits = self.retriever.search(effective_query, owner_id, conversation_id, top_k=request.top_k)
-                valid_hits = _valid_cited_hits(retry_hits, request.query)
+                valid_hits = _valid_cited_hits(retry_hits, original)
                 if not valid_hits:
                     step.status = "fallback"
-        return self._outcome(request.query, effective_query, valid_hits, run,
-                             attempts=attempts, rewritten=rewritten)
+        return self._outcome(original, effective_query, valid_hits, run,
+                             attempts=attempts, rewritten=rewritten, care=care, question=question)
 
     def _outcome(
         self,
@@ -76,18 +86,18 @@ class KnowledgeQASkill:
         *,
         attempts: int,
         rewritten: bool,
+        care: bool = False,
+        question: QuestionContext | None = None,
     ) -> SkillOutcome:
+        decision = support_decision(original_query, hits, care=care)
+        if question and question.recorded_material:
+            declared = material_subjects(question.original_query)
+            recorded = material_subjects(question.recorded_material)
+            if declared and recorded and declared - recorded:
+                decision = SupportDecision("conflict", missing=("garment_material_confirmation",), message=
+                    "本轮提到的材质与所选衣物记录不一致，请先核实当前这件的成分和洗护标签；不会擅自选择另一种材料的操作。")
+        hits = list(decision.hits)
         results = [_result_payload(hit) for hit in hits]
-        # Built-in size entries describe measurement concepts, not per-product
-        # dimensions. A user-supplied size chart may still contain the answer.
-        if requests_exact_product_measurement(original_query) and not any(hit.document_id for hit in hits):
-            return run.finish(status="fallback", data={
-                "query": original_query, "effective_query": effective_query,
-                "query_rewritten": rewritten, "attempts": attempts,
-                "answer_status": "needs_clarification", "missing_conditions": ["product_size_chart"],
-                "results": [], "sources": [],
-                "message": "当前知识库没有这款产品的具体尺寸数据。请提供准确品牌、款号及官方尺码表；通用测量方法不能代替该款实测尺寸。",
-            }, message="请提供这款产品的官方尺码表或测量数据。")
         status = "success" if results else "fallback"
         return run.finish(
             status=status,
@@ -96,8 +106,14 @@ class KnowledgeQASkill:
                 "effective_query": effective_query,
                 "query_rewritten": rewritten,
                 "attempts": attempts,
-                "validation_scope": "source_format_and_finite_scope_not_answer_entailment",
-                "answer_status": "evidence_found" if results else "not_found",
+                "validation_scope": "source_identity_material_product_action_rules_not_general_entailment",
+                "answer_status": ("evidence_found" if results else "needs_clarification" if decision.missing else "not_found"),
+                "support_status": decision.status,
+                "missing_conditions": list(decision.missing),
+                "care_boundary": care,
+                "message": decision.message,
+                "evidence_ids": [hit.chunk_id or hit.record_id or hit.document_id for hit in hits],
+                "information_provenance": ("none" if not hits else "user_supplied_document" if any(h.document_id for h in hits) else "reviewed_builtin_summary"),
                 "results": results,
                 "sources": [
                     {
@@ -108,11 +124,7 @@ class KnowledgeQASkill:
                     for item in results
                 ],
             },
-            message=(
-                "已找到带来源的相关知识。"
-                if results
-                else "知识库暂未找到带有效来源格式的相关资料。"
-            ),
+            message=decision.message or ("已找到限定范围内的来源资料。" if results else "未找到适用证据。"),
         )
 
 
@@ -143,10 +155,19 @@ def _valid_cited_hits(hits: list[RetrievalHit], original_query: str) -> list[Ret
         for hit in hits
         if hit.snippet.strip()
         and hit.source_url.startswith(("https://", "http://", "user-document://"))
-        and (hit.document_id or hit.source_url.startswith("user-document://") or knowledge_compatible(
+        and (_document_material_compatible(hit, original_query) if hit.document_id or hit.source_url.startswith("user-document://") else knowledge_compatible(
             original_query, title=hit.title, content=hit.snippet, topic=hit.topic,
+            record_id=hit.record_id,
         ))
     ]
+
+
+def _document_material_compatible(hit: RetrievalHit, query: str) -> bool:
+    requested = material_subjects(query)
+    available = material_subjects(hit.title + " " + hit.snippet)
+    # A product label may omit fibre information. An explicit different fibre
+    # is still a mismatch even when the document belongs to this conversation.
+    return not (requested and available and not requested.intersection(available))
 
 
 def _result_payload(hit: RetrievalHit) -> dict:

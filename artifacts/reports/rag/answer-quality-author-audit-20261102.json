@@ -1,0 +1,106 @@
+{
+  "reviewer": "Codex, implementation author",
+  "independent_of_implementation": false,
+  "review_type": "evidence_and_scope_notes_without_numeric_quality_grade",
+  "source_report": "artifacts/reports/rag/answer-quality-release-20261102.json",
+  "source_sha256": "bb5e100bdac608acd12ce28cb115a50b815ee2d1f32b985468a280e1cf1d12c3",
+  "independent_human_review": "pending",
+  "notes": [
+    {
+      "id": "aq01",
+      "note": "平放干燥及洗标条件有来源；额外洗前准备信息略显冗余。"
+    },
+    {
+      "id": "aq02",
+      "note": "限定梭织羊毛软刷顺向，不把该方法推广到针织。"
+    },
+    {
+      "id": "aq03",
+      "note": "柔顺剂限制限定在 GORE-TEX 产品说明和成衣标签范围。"
+    },
+    {
+      "id": "aq04",
+      "note": "干燥前提由 ACI 一般衣物来源支持，羊毛清洁由 Woolmark 支持；未授权烘干。"
+    },
+    {
+      "id": "aq05",
+      "note": "区分平铺胸宽和人体胸围，并保留品牌测量范围。"
+    },
+    {
+      "id": "aq06",
+      "note": "旅行配色策略保留个人偏好，不宣称强制规则。"
+    },
+    {
+      "id": "aq07",
+      "note": "整洁检查有来源，熨烫仍以洗标许可为条件。"
+    },
+    {
+      "id": "aq08",
+      "note": "解释中间层保温职责，未转成库存推荐。"
+    },
+    {
+      "id": "aq09",
+      "note": "三醋酸没有被套用羊毛操作，要求补足洗标。"
+    },
+    {
+      "id": "aq10",
+      "note": "腈纶与类比羊毛区分，未授予通用羊毛洗法。"
+    },
+    {
+      "id": "aq11",
+      "note": "混纺饰片缺少整件条件时未授权机洗。"
+    },
+    {
+      "id": "aq12",
+      "note": "保留用户提供的不可烘干限制，未以低温例外推翻。"
+    },
+    {
+      "id": "aq13",
+      "note": "保留仅专业干洗限制，未授权手洗。"
+    },
+    {
+      "id": "aq14",
+      "note": "缺特定款号数据时未填入数字，要求对应尺码表。"
+    },
+    {
+      "id": "aq15",
+      "note": "真丝缺证据时不补写程序。"
+    },
+    {
+      "id": "aq16",
+      "note": "羽绒缺证据时未编造分钟数。"
+    },
+    {
+      "id": "aq17",
+      "note": "选中醋酸衣物仍执行未知材料边界。"
+    },
+    {
+      "id": "aq18",
+      "note": "选中羊毛的建议均保留洗标前提；用户记录未作为厂家核验。"
+    },
+    {
+      "id": "aq19",
+      "note": "当前轮材料修正覆盖旧羊毛假设。"
+    },
+    {
+      "id": "aq20",
+      "note": "税务问题未附衣物资料。"
+    },
+    {
+      "id": "aq21",
+      "note": "上传量衣概念文档不等同款号尺寸数据。"
+    },
+    {
+      "id": "aq22",
+      "note": "明确说明来自用户上传资料，未宣称厂家核验。"
+    },
+    {
+      "id": "aq23",
+      "note": "缺针对性证据时未给化学剂配方或浓度。"
+    },
+    {
+      "id": "aq24",
+      "note": "SHAKEDRY 引用排除段，并使用对应的引用范围说明。"
+    }
+  ]
+}

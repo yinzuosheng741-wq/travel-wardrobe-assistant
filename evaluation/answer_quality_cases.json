@@ -1,0 +1,31 @@
+{
+  "version":"2026-11-02-prospective-v1",
+  "split":"prospective_project_authored",
+  "policy":"Authored and frozen before this implementation; separate from rag_critical and benchmark regression. Not externally authored or human-blind. Do not tune this implementation from scored outcomes; retain failures and use a new version for later development.",
+  "cases":[
+    {"id":"aq01","group":"wool-drying","query":"羊毛针织上衣洗完以后，如何放置才能少变形","references":["fabric-wool-shape","fabric-wool-moisture"],"required_any":[["平放","平铺"]],"forbidden":["必须烘干"],"citation":"required","rubric":"平放保形并保留洗标条件，不能无条件授权烘干。"},
+    {"id":"aq02","group":"woven-brush","query":"梭织羊毛外套上有一点浮灰，衣刷怎么使用","references":["wool-woven-brush"],"required_any":[["顺","方向"],["软","轻"]],"citation":"required","rubric":"限定梭织羊毛和软刷顺向，不能推广到针织衣物。"},
+    {"id":"aq03","group":"gore-detergent","query":"查一下普通GORE-TEX衣物洗护是否能加入柔顺剂","references":["care-shell-liquid-detergent"],"required_any":[["不使用","避免","不宜","不能"]],"forbidden":["可以加入柔顺剂"],"citation":"required","rubric":"不推荐柔顺剂，保留技术产品与制造商洗标范围。"},
+    {"id":"aq04","group":"wool-storage","query":"羊毛换季收纳前要做好哪些准备","references":["storage-wool-clean"],"required_any":[["清洁","清洗"],["干燥","干透","晾干"]],"citation":"required","rubric":"清洁、充分干燥后收纳，不自行补充防虫药剂配方。"},
+    {"id":"aq05","group":"size-concept","query":"知识库解释一下，成衣胸宽为何不能直接当我的胸围","references":["size-flat-body-width","size-body-versus-product"],"required_any":[["平铺","成衣"],["人体","身体"]],"citation":"required","rubric":"区分平铺衣物尺寸和人体尺寸，不虚构特定款号数字。"},
+    {"id":"aq06","group":"trip-color","query":"知识库中出差带衣服时怎样减少颜色太多导致不好组合","references":["travel-mix"],"required_any":[["简单","简","基础","主色"]],"citation":"required","rubric":"用简化主色方便组合，并保留个人偏好，不伪装成强制规则。"},
+    {"id":"aq07","group":"interview-neat","query":"知识库里参加招聘会前怎样检查衣服是否整洁","references":["interview-neat"],"required_any":[["污渍","毛球","破损","褶皱"]],"citation":"required","rubric":"检查整洁与洗标允许的整理，避免性别刻板强制着装。"},
+    {"id":"aq08","group":"layer-role","query":"请查询户外穿搭里中间层的主要职责","references":["layer-mid"],"required_any":[["保暖","保温","热量"]],"citation":"required","rubric":"说明中间层保暖及可调整，不把厚度等同具体温度保证。"},
+    {"id":"aq09","group":"unknown-fibre","query":"这件衣物标着三醋酸，尚未找到洗标，如何清洗","references":[],"required_any":[["洗标","标签","厂家","制造商"]],"forbidden":["翻到反面","GORE-TEX","Woolmark"],"citation":"none","rubric":"不能从未知材料借用羊毛或功能外套操作，补充条件。"},
+    {"id":"aq10","group":"acrylic","query":"腈纶外套可以照羊毛那套方法洗吗","references":[],"required_any":[["洗标","标签","无法","不能"]],"forbidden":["直接照羊毛","可以照羊毛"],"citation":"none","rubric":"不把提到的羊毛参考对象当作当前材料，不自动授权处理。"},
+    {"id":"aq11","group":"blend-permission","query":"60%羊毛40%涤纶还有皮革饰片，能整件放进洗衣机吗","references":["care-label-complete","fabric-wool-label"],"required_any":[["洗标","标签"],["不能","无法","确认","补充"]],"forbidden":["直接机洗即可","可以直接机洗"],"citation":"optional","rubric":"区分整件衣物结构，通用材料背景不能建立机洗许可。"},
+    {"id":"aq12","group":"label-no-dryer","query":"洗标写着不可烘干，可否换成低温烘十分钟","references":[],"required_any":[["不可烘干","不能烘干","不要烘干","不应烘干"]],"forbidden":["低温烘十分钟即可","可以低温烘"],"citation":"none","rubric":"保留用户明确的限制，不能把低温当作授权例外。"},
+    {"id":"aq13","group":"label-only-dryclean","query":"这件羊毛衣物的洗标明确注明只能专业干洗，我可以手洗吗","references":["fabric-wool-label"],"required_any":[["干洗"],["遵循","遵守","不能","不应"]],"forbidden":["可以手洗"],"citation":"optional","rubric":"尊重该产品洗标，通用羊毛知识不能推翻限制。"},
+    {"id":"aq14","group":"exact-product","query":"知识库能查到晨岚A73大衣L码的袖长是多少厘米吗","references":[],"required_any":[["尺码表","尺寸数据","测量数据"]],"forbidden_regex":["袖长[为是：: ]*\\d{2,3}\\s*(厘米|cm)"],"citation":"none","rubric":"没有该款数据时明确缺失，不用通用测量知识填数。"},
+    {"id":"aq15","group":"missing-silk","query":"真丝连衣裙怎么洗护，需要选什么洗涤程序","references":[],"required_any":[["资料","证据","洗标","标签"]],"forbidden":["Woolmark","GORE-TEX"],"citation":"none","rubric":"当前语料缺少已发布真丝材料处理事实，不编造程序。"},
+    {"id":"aq16","group":"missing-down","query":"羽绒衣清洗后应该烘干多久","references":[],"required_any":[["资料","证据","洗标","标签"]],"forbidden_regex":["(?:烘干|烘)[^。\\n]{0,8}\\d+\\s*分钟"],"citation":"none","rubric":"不虚构烘干分钟数，说明需要该件说明。"},
+    {"id":"aq17","group":"selected-unknown","query":"这件如何洗护","material":"醋酸","references":[],"required_any":[["洗标","标签","资料"]],"forbidden":["翻到反面","Woolmark","GORE-TEX"],"citation":"none","rubric":"已记录材料仍需同样边界，不能复用羊毛洗护。"},
+    {"id":"aq18","group":"selected-wool","query":"这件怎么洗护","material":"羊毛","references":["wool-reverse","fabric-wool-label","wool-storage-prep"],"required_any":[["洗标","标签"]],"citation":"required","rubric":"提供限定为羊毛且遵循整件洗标的材料背景，不承诺具体处理许可。"},
+    {"id":"aq19","group":"turn-correction","setup":["我的上衣材质是羊毛"],"query":"上次说错了，这件其实是醋酸，洗标还没找到，如何清洗","references":[],"required_any":[["洗标","标签"]],"forbidden":["翻到反面","Woolmark"],"citation":"none","rubric":"当前轮修正优先，不延续旧羊毛护理。"},
+    {"id":"aq20","group":"tax-scope","query":"知识库能帮忙算个人税务申报需要准备什么材料吗","references":[],"required_any":[["范围","资料","证据","找到"]],"citation":"none","rubric":"不将出行衣物资料当税务证据。"},
+    {"id":"aq21","group":"document-size-absence","document":"晨岚A73大衣L码量衣指南：袖长是沿衣袖测量的衣物长度，本资料没有该款的任何数值。","query":"根据本会话的晨岚A73资料，该款L码袖长具体多少厘米","references":[],"required_any":[["尺码表","尺寸数据","测量数据"]],"forbidden_regex":["袖长[为是：: ]*\\d{2,3}\\s*(厘米|cm)"],"citation":"none","rubric":"文档属于会话不等于包含答案，仍要缺失判断。"},
+    {"id":"aq22","group":"document-label","document":"青岚夹克产品洗标说明：本件仅允许手洗，不可烘干。","query":"根据上传的青岚夹克洗标说明，它可以烘干吗","references":[],"required_any":[["不可烘干","不能烘干","不应烘干","不要烘干"]],"citation":"optional","rubric":"保留当前用户提供的产品限制，不混入厂家已核验的身份声明。"},
+    {"id":"aq23","group":"chemical-gap","query":"羊毛针织品洗护时咖啡渍应使用哪一种去污化学剂配方","references":[],"required_any":[["资料","证据","洗标","标签"]],"forbidden_regex":["\\d+\\s*(毫升|ml|%)"],"citation":"none","rubric":"一般羊毛护理不能支持具体化学剂配方或浓度。"},
+    {"id":"aq24","group":"technical-exclusion","query":"SHAKEDRY衣物洗护后能照普通GORE-TEX那样烘干再喷DWR吗","references":["care-shell-reactivate-dwr","fabric-shell-dwr-beading","wardrobe-maintain-shell-first"],"required_any":[["SHAKEDRY"],["禁止","不可","不能"]],"forbidden":["可以烘干再喷"],"citation":"required","rubric":"必须保留 SHAKEDRY 的明确排除，不能把一般功能外套操作混入答案。"}
+  ]
+}

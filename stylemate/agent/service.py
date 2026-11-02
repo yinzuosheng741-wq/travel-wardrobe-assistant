@@ -34,6 +34,9 @@ from stylemate.domain.models import (
     KnowledgeSource,
     UserDocument,
 )
+from stylemate.rag.query_planning import material_subjects
+from stylemate.rag.question import QuestionContext, current_question, question_scope
+from stylemate.rag.support import evidence_text
 from stylemate.rag.user_docs import DocumentLimits, extract_user_document
 from stylemate.services.profile_service import PROFILE_KEYS, ProfileService
 
@@ -88,7 +91,9 @@ class AgentService:
         if item_intent and requested_id:
             allowed.update({"get_garment", "care_guide", "recommend_inventory_outfit", "get_weather"})
         with observe_run(self.observer) as observation:
-            with request_policy(owner_id, conversation_id, allowed) as policy:
+            with request_policy(owner_id, conversation_id, allowed) as policy, question_scope(
+                QuestionContext(owner_id, conversation_id, text)
+            ):
                 try:
                     if requested_id or len(matching) > 1:
                         reply = self._chat(owner_id, conversation_id, text, garment_id=requested_id,
@@ -111,7 +116,11 @@ class AgentService:
             content, traces, sources = "你提到不穿这件衣物；请取消选择后说明其他搭配需求，我不会把它作为必选单品。", [], []
         elif garment_id and _item_question(text):
             content, traces, sources = self._selected_item_route(owner_id, conversation_id, text, garment_id)
-        elif _item_question(text) and re.search(r"这件|这条|这双|这个|它", text) and not garment_id:
+        elif (_item_question(text) and re.search(r"这件|这条|这双|这个|它", text) and not garment_id
+              and not (any(term in text for term in CARE_INTENT_TERMS) and (
+                  material_subjects(text) or (re.search(r"上传|本会话|文档|资料|洗标说明", text)
+                                            and self.repository.list_documents(owner_id, conversation_id))
+              ))):
             content, traces, sources = "请先选择要咨询的衣物，或提供衣物的准确名称。", [], []
         elif (shortcut := self._shortcut_route(owner_id, conversation_id, text, state=state)) is not None:
             content, traces, sources = shortcut
@@ -435,7 +444,9 @@ class AgentService:
             material = (item.get("material") or "").strip()
             if not material or material.casefold() in {"未知", "未填写", "不详", "unknown"}:
                 return f"{name}尚未记录材质。请查看衣物成分和洗护标签，补充后再查询；不能仅凭款式确定洗法。", item_traces, []
-            content, traces, sources = self._call_named(toolkit, "care_guide", {"material": material})
+            question = current_question(owner_id, conversation_id) or QuestionContext(owner_id, conversation_id, text)
+            with question_scope(question.for_garment(garment_id, material)):
+                content, traces, sources = self._call_named(toolkit, "care_guide", {"material": material})
             return (f"关于「{name}」（已记录材质：{material}）：\n{content}\n请以整件衣物的洗护标签为准。",
                     [*item_traces, *traces], sources)
         if is_outfit_intent(text) or any(term in text for term in ("穿", "配什么")):
@@ -496,6 +507,8 @@ class AgentService:
                 for label, field in (("适用范围", "applicability"), ("限制", "limitations")):
                     if snippets[0].get(field):
                         content += f"\n{label}：{snippets[0][field]}"
+            if result.get("care_boundary") or result.get("support_status") in {"partial", "conflict", "needs_clarification", "out_of_scope"}:
+                content = evidence_text(result)
         elif name == "recommend_open_outfit" and isinstance(result, dict):
             content = result.get("recommendation", "暂未生成通用穿搭建议。")
             alternatives = result.get("alternatives", [])
@@ -585,7 +598,7 @@ def _displayed_evidence(result: dict[str, Any]) -> list[dict[str, Any]]:
     first = snippets[0]
     document_id = first.get("document_id")
     if not document_id:
-        return [first]
+        return snippets[:2] if result.get("care_boundary") else [first]
     return [item for item in snippets if item.get("document_id") == document_id][:2]
 
 

@@ -96,6 +96,16 @@ def is_outfit_intent(text: str) -> bool:
     return any(term in text for term in OUTFIT_INTENT_TERMS) or bool(_COLLOQUIAL_OUTFIT.search(text))
 
 
+def _layer_concept(text: str) -> bool:
+    return bool(re.search(r"贴身层|基础层|中间层|保暖层|外层|分层", text) and
+                re.search(r"职责|作用|原理|是什么|负责", text))
+
+
+def _document_question(text: str) -> bool:
+    return bool(re.search(r"(?:上传|本会话).{0,30}(?:资料|文档|说明)|根据.{0,30}文档", text)
+                and not explicit_write_tools(text))
+
+
 def task_intent(text: str) -> str:
     """One ordered decision for service fallbacks and graph diagnostics.
 
@@ -107,7 +117,7 @@ def task_intent(text: str) -> str:
         return "delete_explanation"
     if any(term in text for term in ("推荐购买", "买什么", "购买建议")):
         return "purchase"
-    if ("知识库" in text or any(term in text for term in CONCEPT_KNOWLEDGE_TERMS)) and not any(term in lower for term in CARE_INTENT_TERMS):
+    if ("知识库" in text or _layer_concept(text) or _document_question(text) or any(term in text for term in CONCEPT_KNOWLEDGE_TERMS)) and not any(term in lower for term in CARE_INTENT_TERMS):
         return "knowledge"
     if any(term in text for term in ("旅行", "旅游", "行李")):
         return "travel"
@@ -150,6 +160,8 @@ def route_skills(text: str, available: set[str], *, travel_follow_up: bool = Fal
     allowed: set[str] = set()
     for skill in skills:
         allowed.update(SKILL_TOOLS[skill])
+    if intent == "knowledge" and not any(term in normalized for term in CARE_INTENT_TERMS):
+        allowed.discard("care_guide")
     if re.search(r"配色|色轮|互补色|邻近色|类似色", text) and not re.search(r"洗|护理|保养|烘|熨|漂白|柔顺剂", text):
         allowed.discard("care_guide")
     writes = explicit_write_tools(text)
@@ -160,7 +172,7 @@ def route_skills(text: str, available: set[str], *, travel_follow_up: bool = Fal
     if not skills:
         # Ambiguous requests retain read recall without silently granting writes.
         allowed = available - WRITE_TOOLS
-    deterministic = intent in {"delete_explanation", "delete", "purchase", "travel", "care", "outfit"} or any(
+    deterministic = intent in {"delete_explanation", "delete", "purchase", "travel", "care", "outfit"} or _layer_concept(text) or any(
         term in text for term in MEASUREMENT_KNOWLEDGE_TERMS
     )
     return SkillRoute(skills or ("read_fallback",), frozenset(allowed & available),

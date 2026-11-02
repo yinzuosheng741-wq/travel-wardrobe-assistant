@@ -144,7 +144,7 @@ Qt 原生界面 → 业务服务 → SQLite / 照片 / 会话资料
 
 RAG 的切分、真实混合检索、上下文保留、知识覆盖缺口及来源维护检查见 [RAG 审计与补库建议](docs/reports/RAG_AUDIT_20261031.md)。当前 86 条记录中只有 41 条已审核摘要进入事实检索，不能把主题齐全或固定题集 Recall 当作完整问答能力。
 
-后续 [关键点复核与改进清单](docs/reports/RAG_CRITICAL_REVIEW_20261031.md)提供 23 个工具/Skill/图/选中衣物契约用例、生产 Top K 对照和 8 个待审读挑战；当前仍有 9 个契约问题，属于开发诊断结果。可运行 `python -m evaluation.rag_critical --output artifacts/rag-critical-next.json` 重放；加 `--require-pass` 可在契约不满足时返回非零退出码。运行成功不代表问题已修复，详见[总体优化方案](docs/plans/RAG_OPTIMIZATION_PLAN.md)。
+原 [关键点复核](docs/reports/RAG_CRITICAL_REVIEW_20261031.md)记录了 23 个契约中的 9 个问题。后续[洗护证据边界与回答评测](docs/reports/CARE_EVIDENCE_20261102.md)实现原问题约束传播、未知材料与整件洗标边界，并加入单独冻结的回答质量题集。可运行 `python -m evaluation.rag_critical --output artifacts/local/rag-critical-next.json --require-pass` 重放原契约；语义正确性与人工审读另行记录，不以工程测试通过替代。
 
 ## 已知限制与常见问题
 

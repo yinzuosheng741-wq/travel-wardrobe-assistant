@@ -13,6 +13,6 @@
 | `local/` | 本地验证、历史日志压缩归档与整理记录，Git 忽略 |
 | `validation/` | `scripts/validate.py` 默认输出，Git 忽略；CI 单独上传，保留 14 天 |
 
-最近 RAG 诊断：[2026-10-31 结果](reports/rag/rag-critical-review-20261031.json)，解释与限制见[对应报告](../docs/reports/RAG_CRITICAL_REVIEW_20261031.md)。其中仍有 9 个待改进契约问题。
+最近洗护修复：[2026-11-02 契约重放](reports/rag/care-release-critical-20261102.json)为 23/23；[回答质量及独立性说明](../docs/reports/CARE_EVIDENCE_20261102.md)保留首次失败与后续回归。2026-10-31 的 [14/23 原始诊断](reports/rag/rag-critical-review-20261031.json)继续保留。外部独立人工审读仍待完成，24/24 回归不作为盲测准确率。
 
 历史 JSON 的测量值、指纹及其内部原始路径不重写；移动只改变文件存放位置。复现实验应使用报告对应的代码、语料与题集版本。新实验另取文件名，不覆盖旧基线；仅将确认可公开的结果放入 `reports/`。密钥、数据库、用户照片与真实会话不得放入本目录的公开区域。

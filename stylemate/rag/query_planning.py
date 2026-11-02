@@ -16,16 +16,18 @@ ALIASES = {
 }
 
 SUBJECTS = {
-    "wool": r"羊毛|\bwool\b",
-    "cashmere": r"羊绒|\bcashmere\b",
-    "cotton": r"棉|\bcotton\b",
-    "silk": r"真丝|蚕丝|\bsilk\b",
-    "leather": r"皮革|真皮|\bleather\b",
-    "down": r"羽绒|\bdown\b",
-    "linen": r"亚麻|麻质|\blinen\b",
-    "polyester": r"涤纶|聚酯|\bpolyester\b",
-    "nylon": r"尼龙|锦纶|\bnylon\b",
-    "viscose": r"粘纤|粘胶|人造丝|\bviscose\b|\brayon\b",
+    "wool": r"羊毛|(?<![A-Za-z])wool(?![A-Za-z])",
+    "cashmere": r"羊绒|(?<![A-Za-z])cashmere(?![A-Za-z])",
+    "cotton": r"棉|(?<![A-Za-z])cotton(?![A-Za-z])",
+    "silk": r"真丝|蚕丝|(?<![A-Za-z])silk(?![A-Za-z])",
+    "leather": r"皮革|真皮|麂皮|(?<![A-Za-z])leather(?![A-Za-z])",
+    "down": r"羽绒|(?<![A-Za-z])down(?![A-Za-z])",
+    "linen": r"亚麻|麻质|(?<![A-Za-z])linen(?![A-Za-z])",
+    "polyester": r"涤纶|聚酯|(?<![A-Za-z])polyester(?![A-Za-z])",
+    "nylon": r"尼龙|锦纶|(?<![A-Za-z])nylon(?![A-Za-z])",
+    "viscose": r"粘纤|粘胶|人造丝|(?<![A-Za-z])(?:viscose|rayon)(?![A-Za-z])",
+    "acetate": r"醋酸|醋酯|(?<![A-Za-z])(?:triacetate|acetate)(?![A-Za-z])",
+    "acrylic": r"腈纶|(?<![A-Za-z])acrylic(?![A-Za-z])",
     "goretex": r"gore[ -]?tex|shakedry",
 }
 
@@ -35,7 +37,8 @@ _GARMENT_ONLY = re.compile(_UNCONFIRMED_CATEGORY.pattern + r"|衣物|衣服", re
 _GENERAL_CARE_FACT = re.compile(r"符号|洗标|分类|污渍|收纳|折叠|用量|洗涤剂|烘干前", re.I)
 _OTHER_DOMAIN_SUBJECT = re.compile(
     r"股票|证券|基金|股价|期货|外汇|变速箱|发动机|汽车|轮胎|电脑|数据库|服务器|程序代码|"
-    r"血压|糖尿病|药物剂量|抗生素|食谱|炒菜|烹饪|\b(?:stock|investment|engine|database|antibiotic)\b", re.I,
+    r"税务|报税|个税|房屋租赁|违约金|血压|糖尿病|药物剂量|抗生素|食谱|炒菜|烹饪|"
+    r"\b(?:stock|investment|engine|database|antibiotic)\b", re.I,
 )
 _CLOTHING_SUBJECT = re.compile(
     r"衣|裤|衫|裙|鞋|袜|帽|围巾|穿|搭配|面料|洗标|尺码|胸围|羊毛|羊绒|真丝|亚麻|"
@@ -65,24 +68,34 @@ def requests_exact_product_measurement(query: str) -> bool:
                           rf"(?:多少|几厘米|几公分).{{0,12}}(?:{dimensions})", query))
 
 
-def material_clarification(query: str) -> str | None:
+def material_subjects(query: str) -> frozenset[str]:
+    # A comparison object or a corrected old assertion is not the current fibre.
+    query = re.sub(r"(?:不是|并非|不是说).{0,12}?[，,](?:而?是)?", "", query)
+    query = re.sub(r"(?:照|按照|参照)(?:羊毛|棉|真丝).{0,6}(?:那套|方法|方式)", "", query)
+    return frozenset(key for key, pattern in SUBJECTS.items() if re.search(pattern, query, re.I))
+
+
+def material_clarification(query: str, *, explicit_material: bool = False) -> str | None:
     """A garment category does not establish its fibre or product care label."""
-    if any(re.search(pattern, query, re.I) for pattern in SUBJECTS.values()):
+    if material_subjects(query):
         return None
-    if _GARMENT_ONLY.search(query) and not _GENERAL_CARE_FACT.search(query):
+    if (explicit_material or _GARMENT_ONLY.search(query)) and not _GENERAL_CARE_FACT.search(query):
         return "请先提供这件衣物的材质成分或洗护标签；仅凭衣物类别还不能确定洗涤、烘干等处理方法。"
     return None
 
 
-def knowledge_compatible(query: str, *, title: str, content: str, topic: str) -> bool:
+def knowledge_compatible(query: str, *, title: str, content: str, topic: str, record_id: str | None = None) -> bool:
     """Reject explicit subject/topic mismatches; this is not entailment scoring."""
     if is_outside_builtin_scope(query):
         return False
-    requested = {key for key, pattern in SUBJECTS.items() if re.search(pattern, query, re.I)}
-    available = {key for key, pattern in SUBJECTS.items()
-                 if re.search(pattern, f"{title} {content}", re.I)}
+    requested = material_subjects(query)
+    available = material_subjects(f"{title} {content}")
     if requested and not requested.intersection(available):
-        return False
+        # One reviewed, material-independent prerequisite. This permits only
+        # "fully dry before storage", never a drying method or heat permission.
+        if not (record_id == "storage-dry-before-fold" and topic == "storage" and
+                re.search(r"收纳|存放|折叠|储存", query) and not available):
+            return False
     if not requested and _UNCONFIRMED_CATEGORY.search(query) and available:
         # Generic clothing/sweater/shell questions may receive general care
         # evidence, but cannot silently acquire wool or a brand technology.

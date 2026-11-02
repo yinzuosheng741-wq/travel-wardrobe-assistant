@@ -240,6 +240,7 @@ class HybridRetriever:
         before_filter = len(candidates)
         candidates = [candidate for candidate in candidates if candidate.document_id or knowledge_compatible(
             query, title=candidate.title, content=candidate.content, topic=candidate.topic,
+            record_id=candidate.record_id,
         )]
         candidate_map = {candidate.key: candidate for candidate in candidates}
         if not candidates:

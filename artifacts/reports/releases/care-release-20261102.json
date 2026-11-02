@@ -1,0 +1,12 @@
+{
+  "source_fingerprint": "ab09eb28048714c208d414ef0fe836a8c76e206827f52e296becd06f9c36ba44",
+  "public_zip_sha256": "7a779c7507a17e8413b0d907e9635da0e81d4a984ed583b20b6e2a08187b008d",
+  "public_zip_bytes": 100691009,
+  "public_zip_integrity": true,
+  "private_key_scan_matches": [],
+  "portable_no_ui_exit_code": 0,
+  "personal_protected_files": 134,
+  "personal_data_unchanged": true,
+  "personal_executable_matches_public": true,
+  "validation": "artifacts/local/care-release-20261102/verified-validation/validation.json"
+}

@@ -17,6 +17,7 @@ from stylemate.agent.policy import remaining_request_seconds
 from stylemate.agent.telemetry import record_counter
 from stylemate.agent.tool_results import business_metadata
 from stylemate.domain.models import AgentTraceStep, ToolExecution, ToolSpec
+from stylemate.rag.question import QuestionContext
 from stylemate.repositories.base import WardrobeRepository
 
 
@@ -29,6 +30,7 @@ class ToolContext:
     amap_client: Any | None
     settings: Any | None
     conversation_id: str = ""
+    question: QuestionContext | None = None
 
 
 ToolHandler = Callable[[dict[str, Any], ToolContext], Any]

@@ -1,0 +1,2268 @@
+{
+  "version": "2026-11-02-prospective-v1",
+  "dataset_sha256": "869d25344e67bd7cc28c6ce600d06260ebbf844b521441872f69d83b941941e1",
+  "assessment_version": "2-reviewed-source-registry-for-url-identity",
+  "created_at_utc": "2026-11-02T02:24:36.918353+00:00",
+  "source_fingerprint": "ab09eb28048714c208d414ef0fe836a8c76e206827f52e296becd06f9c36ba44",
+  "corpus_sha256": "c7d5b14bda620f69671b451c68f24718d0ab1fb4547eea3b0fc96ae9ded1acfe",
+  "split": "development_regression_after_first_analysis",
+  "evaluation_usage": {
+    "version": "2026-11-02-prospective-v1",
+    "current_split": "development_regression_after_first_analysis",
+    "first_scored_report": "artifacts/reports/rag/answer-quality-20261102.json",
+    "first_report_sha256": "e9f5359086cab64525e24e6421e2bcd0cd7347eac746a84a4be8d140c3dcf1d7",
+    "first_rule_pass": {
+      "passed": 16,
+      "total": 24,
+      "rate": 0.6667,
+      "wilson_95": [
+        0.4671,
+        0.8203
+      ]
+    },
+    "reason": "First outputs exposed operation-loss and selection/routing gaps. These outputs were analyzed and fixes followed; subsequent replays are regression, not held-out. Independent human review remains pending."
+  },
+  "model": null,
+  "review_provenance": {
+    "model_assisted": false,
+    "separate_review_context": true,
+    "same_configured_model_family": false,
+    "independent_human_review": "pending"
+  },
+  "scope": [
+    "Public AgentService.chat including guards, retrieval and final source selection.",
+    "Synthetic wardrobe; mocked weather; BM25 retrieval, no real embedding call.",
+    "Separate prospective project-authored data, not externally authored blind evaluation.",
+    "Finite rule assertions and model-assisted review reported separately; neither is expert certification."
+  ],
+  "rows": [
+    {
+      "id": "aq01",
+      "group": "wool-drying",
+      "question": "羊毛针织上衣洗完以后，如何放置才能少变形",
+      "answer": "Woolmark 建议羊毛衫洗后平放干燥，除非洗标明确允许烘干。羊毛针织品宜轻折收纳；梭织羊毛衣物则可使用有形状支撑或衬垫的衣架，二者不能混为同一方法。\n适用范围：区分羊毛针织品与梭织品；受具体洗标限制。\n限制：只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。\n来源：https://www.woolmark.com/care/care-for-wool/\nWoolmark 建议羊毛衣物洗涤或收纳前清空口袋、取下腰带及饰品，并扣好纽扣或拉好拉链，以减少局部受力和变形。\n适用范围：羊毛衣物的洗前或收纳准备\n限制：具体收纳方法还要参考款式、清洁状态及产品标签。\n来源：https://www.woolmark.com/care/care-for-wool/",
+      "sources": [
+        {
+          "id": "Woolmark",
+          "title": "羊毛保持版型",
+          "url": "https://www.woolmark.com/care/care-for-wool/"
+        }
+      ],
+      "references": [
+        {
+          "id": "fabric-wool-shape",
+          "title": "羊毛保持版型",
+          "content": "Woolmark 建议羊毛衫洗后平放干燥，除非洗标明确允许烘干。羊毛针织品宜轻折收纳；梭织羊毛衣物则可使用有形状支撑或衬垫的衣架，二者不能混为同一方法。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "fabric",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Hang wovens, fold knits; How to dry a wool sweater",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "区分羊毛针织品与梭织品；受具体洗标限制。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        },
+        {
+          "id": "fabric-wool-moisture",
+          "title": "羊毛受潮先干燥",
+          "content": "羊毛衣物受潮后可在室温下干燥并避开直接日晒或热源。羊毛衫洗后通常平放干燥，仅在洗标允许时考虑烘干；这里的建议不等同于所有羊毛成衣都可水洗。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "fabric",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Dry away from direct sunlight or heat; How to dry a wool sweater",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "受潮或洗后的羊毛衣物；水洗许可另查洗标。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        }
+      ],
+      "cited_source_records": [
+        {
+          "id": "fabric-wool-label",
+          "title": "羊毛先看洗标",
+          "content": "羊毛衣物清洗前先读取成衣洗标。Woolmark 提醒部分衣物要求仅干洗，不能只凭羊毛材质判断可机洗；缺少洗标时，应先向制造商确认适用护理方式。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "fabric",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Can you dry clean Merino wool?",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "羊毛成衣，具体护理仍由该件洗标限定。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        },
+        {
+          "id": "fabric-wool-heat",
+          "title": "羊毛避免高温",
+          "content": "羊毛衣物受潮后，Woolmark 建议在室温下干燥，避开直接日晒和热源。是否可以烘干须另看洗标，不能把自然干燥建议理解为所有羊毛衣物均可受热处理。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "fabric",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Dry away from direct sunlight or heat",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "受潮羊毛衣物的自然干燥。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        },
+        {
+          "id": "fabric-wool-shape",
+          "title": "羊毛保持版型",
+          "content": "Woolmark 建议羊毛衫洗后平放干燥，除非洗标明确允许烘干。羊毛针织品宜轻折收纳；梭织羊毛衣物则可使用有形状支撑或衬垫的衣架，二者不能混为同一方法。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "fabric",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Hang wovens, fold knits; How to dry a wool sweater",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "区分羊毛针织品与梭织品；受具体洗标限制。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        },
+        {
+          "id": "storage-wool-clean",
+          "title": "羊毛收纳前清洁",
+          "content": "羊毛长期收纳前应保持清洁，因为食物污渍和身体油脂会吸引衣蛾。Woolmark 建议清洁后再放入密闭袋或容器；使用防蛀用品时不要让其直接接触衣物。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "storage",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Long-term storage",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "羊毛长期收纳；清洁方式需另查洗标。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        },
+        {
+          "id": "fabric-wool-moisture",
+          "title": "羊毛受潮先干燥",
+          "content": "羊毛衣物受潮后可在室温下干燥并避开直接日晒或热源。羊毛衫洗后通常平放干燥，仅在洗标允许时考虑烘干；这里的建议不等同于所有羊毛成衣都可水洗。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "fabric",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Dry away from direct sunlight or heat; How to dry a wool sweater",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "受潮或洗后的羊毛衣物；水洗许可另查洗标。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        },
+        {
+          "id": "wool-reverse",
+          "title": "羊毛衣物洗前翻面与分色",
+          "content": "Woolmark 建议清洗羊毛衣物前翻到反面，并分开深浅色以减少染色风险；清洗方式仍应先遵循衣物自身的洗护标签。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "care",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Caring for wool: opening paragraphs",
+          "review_note": "对照所标注的来源段落核对中文概述和适用限制；色彩理论仅作为可选思路。",
+          "reviewed_at": "2026-10-30",
+          "reviewer": "codex-source-comparison",
+          "applicability": "标签允许洗涤的羊毛衣物",
+          "limitations": "不适用于未知成分衣物；洗涤温度和方式以具体产品标签为准。"
+        },
+        {
+          "id": "wool-storage-prep",
+          "title": "羊毛衣物存放前整理",
+          "content": "Woolmark 建议羊毛衣物洗涤或收纳前清空口袋、取下腰带及饰品，并扣好纽扣或拉好拉链，以减少局部受力和变形。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "storage",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Caring for Wool",
+          "review_note": "对照所标注的来源段落核对中文概述和适用限制；色彩理论仅作为可选思路。",
+          "reviewed_at": "2026-10-30",
+          "reviewer": "codex-source-comparison",
+          "applicability": "羊毛衣物的洗前或收纳准备",
+          "limitations": "具体收纳方法还要参考款式、清洁状态及产品标签。"
+        },
+        {
+          "id": "wool-woven-brush",
+          "title": "梭织羊毛表面灰尘的处理",
+          "content": "Woolmark 建议仅对梭织羊毛衣物使用柔软衣刷，穿后沿织物长度方向轻刷表面灰尘；针织衣物不能直接套用这条建议。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "care",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Brushing",
+          "review_note": "对照所标注的来源段落核对中文概述和适用限制；色彩理论仅作为可选思路。",
+          "reviewed_at": "2026-10-30",
+          "reviewer": "codex-source-comparison",
+          "applicability": "梭织羊毛衣物的表面除尘",
+          "limitations": "不适用于未知织法、易损装饰或不允许刷拭的衣物；遵循产品说明。"
+        }
+      ],
+      "rubric": "平放保形并保留洗标条件，不能无条件授权烘干。",
+      "traces": [
+        {
+          "name": "care_guide",
+          "status": "success",
+          "summary": "{\"answer_status\": \"evidence_found\", \"attempts\": 1, \"care_boundary\": true, \"effective_query\": \"羊毛针织上衣洗完以后，如何放置才能少变形\", \"evidence_ids\": [\"fabric-wool-shape\", \"w...",
+          "duration_ms": 0
+        }
+      ],
+      "duration_ms": 14.314,
+      "model_invocations": 0,
+      "rule_checks": {
+        "nonempty": true,
+        "required_text": true,
+        "forbidden_text_absent": true,
+        "forbidden_pattern_absent": true,
+        "citation_presence": true,
+        "citation_identity": true
+      },
+      "rule_pass": true,
+      "model_review": null
+    },
+    {
+      "id": "aq02",
+      "group": "woven-brush",
+      "question": "梭织羊毛外套上有一点浮灰，衣刷怎么使用",
+      "answer": "Woolmark 建议仅对梭织羊毛衣物使用柔软衣刷，穿后沿织物长度方向轻刷表面灰尘；针织衣物不能直接套用这条建议。\n适用范围：梭织羊毛衣物的表面除尘\n限制：不适用于未知织法、易损装饰或不允许刷拭的衣物；遵循产品说明。",
+      "sources": [
+        {
+          "id": "Woolmark",
+          "title": "梭织羊毛表面灰尘的处理",
+          "url": "https://www.woolmark.com/care/care-for-wool/"
+        }
+      ],
+      "references": [
+        {
+          "id": "wool-woven-brush",
+          "title": "梭织羊毛表面灰尘的处理",
+          "content": "Woolmark 建议仅对梭织羊毛衣物使用柔软衣刷，穿后沿织物长度方向轻刷表面灰尘；针织衣物不能直接套用这条建议。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "care",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Brushing",
+          "review_note": "对照所标注的来源段落核对中文概述和适用限制；色彩理论仅作为可选思路。",
+          "reviewed_at": "2026-10-30",
+          "reviewer": "codex-source-comparison",
+          "applicability": "梭织羊毛衣物的表面除尘",
+          "limitations": "不适用于未知织法、易损装饰或不允许刷拭的衣物；遵循产品说明。"
+        }
+      ],
+      "cited_source_records": [
+        {
+          "id": "fabric-wool-label",
+          "title": "羊毛先看洗标",
+          "content": "羊毛衣物清洗前先读取成衣洗标。Woolmark 提醒部分衣物要求仅干洗，不能只凭羊毛材质判断可机洗；缺少洗标时，应先向制造商确认适用护理方式。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "fabric",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Can you dry clean Merino wool?",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "羊毛成衣，具体护理仍由该件洗标限定。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        },
+        {
+          "id": "fabric-wool-heat",
+          "title": "羊毛避免高温",
+          "content": "羊毛衣物受潮后，Woolmark 建议在室温下干燥，避开直接日晒和热源。是否可以烘干须另看洗标，不能把自然干燥建议理解为所有羊毛衣物均可受热处理。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "fabric",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Dry away from direct sunlight or heat",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "受潮羊毛衣物的自然干燥。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        },
+        {
+          "id": "fabric-wool-shape",
+          "title": "羊毛保持版型",
+          "content": "Woolmark 建议羊毛衫洗后平放干燥，除非洗标明确允许烘干。羊毛针织品宜轻折收纳；梭织羊毛衣物则可使用有形状支撑或衬垫的衣架，二者不能混为同一方法。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "fabric",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Hang wovens, fold knits; How to dry a wool sweater",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "区分羊毛针织品与梭织品；受具体洗标限制。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        },
+        {
+          "id": "storage-wool-clean",
+          "title": "羊毛收纳前清洁",
+          "content": "羊毛长期收纳前应保持清洁，因为食物污渍和身体油脂会吸引衣蛾。Woolmark 建议清洁后再放入密闭袋或容器；使用防蛀用品时不要让其直接接触衣物。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "storage",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Long-term storage",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "羊毛长期收纳；清洁方式需另查洗标。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        },
+        {
+          "id": "fabric-wool-moisture",
+          "title": "羊毛受潮先干燥",
+          "content": "羊毛衣物受潮后可在室温下干燥并避开直接日晒或热源。羊毛衫洗后通常平放干燥，仅在洗标允许时考虑烘干；这里的建议不等同于所有羊毛成衣都可水洗。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "fabric",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Dry away from direct sunlight or heat; How to dry a wool sweater",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "受潮或洗后的羊毛衣物；水洗许可另查洗标。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        },
+        {
+          "id": "wool-reverse",
+          "title": "羊毛衣物洗前翻面与分色",
+          "content": "Woolmark 建议清洗羊毛衣物前翻到反面，并分开深浅色以减少染色风险；清洗方式仍应先遵循衣物自身的洗护标签。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "care",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Caring for wool: opening paragraphs",
+          "review_note": "对照所标注的来源段落核对中文概述和适用限制；色彩理论仅作为可选思路。",
+          "reviewed_at": "2026-10-30",
+          "reviewer": "codex-source-comparison",
+          "applicability": "标签允许洗涤的羊毛衣物",
+          "limitations": "不适用于未知成分衣物；洗涤温度和方式以具体产品标签为准。"
+        },
+        {
+          "id": "wool-storage-prep",
+          "title": "羊毛衣物存放前整理",
+          "content": "Woolmark 建议羊毛衣物洗涤或收纳前清空口袋、取下腰带及饰品，并扣好纽扣或拉好拉链，以减少局部受力和变形。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "storage",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Caring for Wool",
+          "review_note": "对照所标注的来源段落核对中文概述和适用限制；色彩理论仅作为可选思路。",
+          "reviewed_at": "2026-10-30",
+          "reviewer": "codex-source-comparison",
+          "applicability": "羊毛衣物的洗前或收纳准备",
+          "limitations": "具体收纳方法还要参考款式、清洁状态及产品标签。"
+        },
+        {
+          "id": "wool-woven-brush",
+          "title": "梭织羊毛表面灰尘的处理",
+          "content": "Woolmark 建议仅对梭织羊毛衣物使用柔软衣刷，穿后沿织物长度方向轻刷表面灰尘；针织衣物不能直接套用这条建议。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "care",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Brushing",
+          "review_note": "对照所标注的来源段落核对中文概述和适用限制；色彩理论仅作为可选思路。",
+          "reviewed_at": "2026-10-30",
+          "reviewer": "codex-source-comparison",
+          "applicability": "梭织羊毛衣物的表面除尘",
+          "limitations": "不适用于未知织法、易损装饰或不允许刷拭的衣物；遵循产品说明。"
+        }
+      ],
+      "rubric": "限定梭织羊毛和软刷顺向，不能推广到针织衣物。",
+      "traces": [
+        {
+          "name": "rag_search",
+          "status": "success",
+          "summary": "{\"answer_status\": \"evidence_found\", \"attempts\": 1, \"care_boundary\": false, \"effective_query\": \"梭织羊毛外套上有一点浮灰，衣刷怎么使用\", \"evidence_ids\": [\"wool-woven-brush\", \"fa...",
+          "duration_ms": 0
+        }
+      ],
+      "duration_ms": 4.109,
+      "model_invocations": 0,
+      "rule_checks": {
+        "nonempty": true,
+        "required_text": true,
+        "forbidden_text_absent": true,
+        "forbidden_pattern_absent": true,
+        "citation_presence": true,
+        "citation_identity": true
+      },
+      "rule_pass": true,
+      "model_review": null
+    },
+    {
+      "id": "aq03",
+      "group": "gore-detergent",
+      "question": "查一下普通GORE-TEX衣物洗护是否能加入柔顺剂",
+      "answer": "GORE-TEX 外套一般洗护说明建议使用少量液体洗涤剂，不使用粉状洗涤剂、柔顺剂、去渍剂或漂白剂。具体成衣的制造商洗标仍需先核对，不能把该说明推广到所有材质。\n适用范围：GORE-TEX 外套的一般洗涤，受具体洗标限制。\n限制：只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。\n来源：https://www.gore-tex.com/support/care/outerwear",
+      "sources": [
+        {
+          "id": "GORE-TEX Brand",
+          "title": "功能外套慎选洗涤剂",
+          "url": "https://www.gore-tex.com/support/care/outerwear"
+        }
+      ],
+      "references": [
+        {
+          "id": "care-shell-liquid-detergent",
+          "title": "功能外套慎选洗涤剂",
+          "content": "GORE-TEX 外套一般洗护说明建议使用少量液体洗涤剂，不使用粉状洗涤剂、柔顺剂、去渍剂或漂白剂。具体成衣的制造商洗标仍需先核对，不能把该说明推广到所有材质。",
+          "source_url": "https://www.gore-tex.com/support/care/outerwear",
+          "source_name": "GORE-TEX Brand",
+          "topic": "care",
+          "retrieved_at": "2026-08-17",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "GORE-TEX Outerwear / Wash / Step 2",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "GORE-TEX 外套的一般洗涤，受具体洗标限制。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        }
+      ],
+      "cited_source_records": [
+        {
+          "id": "care-shell-close-zips",
+          "title": "功能外套洗前闭合拉链",
+          "content": "GORE-TEX 外套的一般洗护说明要求清洗前闭合前襟、口袋及腋下拉链，并固定松动的搭片和带子。操作还需遵循成衣制造商的洗标，不能直接推广到所有功能面料外套。",
+          "source_url": "https://www.gore-tex.com/support/care/outerwear",
+          "source_name": "GORE-TEX Brand",
+          "topic": "care",
+          "retrieved_at": "2026-08-17",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "GORE-TEX Outerwear / Wash / Step 1",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "GORE-TEX 外套的一般护理；先核对制造商说明。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        },
+        {
+          "id": "care-shell-liquid-detergent",
+          "title": "功能外套慎选洗涤剂",
+          "content": "GORE-TEX 外套一般洗护说明建议使用少量液体洗涤剂，不使用粉状洗涤剂、柔顺剂、去渍剂或漂白剂。具体成衣的制造商洗标仍需先核对，不能把该说明推广到所有材质。",
+          "source_url": "https://www.gore-tex.com/support/care/outerwear",
+          "source_name": "GORE-TEX Brand",
+          "topic": "care",
+          "retrieved_at": "2026-08-17",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "GORE-TEX Outerwear / Wash / Step 2",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "GORE-TEX 外套的一般洗涤，受具体洗标限制。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        },
+        {
+          "id": "fabric-shell-dwr-beading",
+          "title": "泼水表现先做水珠检查",
+          "content": "GORE-TEX 外套清洗后，若水仍不能聚成水珠并滚落，一般护理说明建议重新施加耐久拒水处理。但持久泼水表面产品如 SHAKEDRY 不适用，不能施加 DWR。",
+          "source_url": "https://www.gore-tex.com/support/care/outerwear",
+          "source_name": "GORE-TEX Brand",
+          "topic": "fabric",
+          "retrieved_at": "2026-08-17",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Re-apply the DWR / Step 1; Special Care",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "普通 GORE-TEX 外套；SHAKEDRY 等持久泼水表面产品除外。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        },
+        {
+          "id": "care-shell-reactivate-dwr",
+          "title": "按产品说明恢复拒水",
+          "content": "部分普通 GORE-TEX 外套可按制造商洗标和官方护理步骤，通过温和烘干或隔布低温熨烫恢复拒水表现。SHAKEDRY 等持久泼水表面产品禁止烘干、熨烫及施加 DWR，不能套用常规步骤。",
+          "source_url": "https://www.gore-tex.com/support/care/outerwear",
+          "source_name": "GORE-TEX Brand",
+          "topic": "care",
+          "retrieved_at": "2026-08-17",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "DRY / Step 2; Special Care",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "仅允许相应受热护理的普通 GORE-TEX 外套；排除 SHAKEDRY。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        },
+        {
+          "id": "wardrobe-maintain-shell-first",
+          "title": "功能外套先维护再替换",
+          "content": "GORE-TEX 的一般护理步骤把清洗后的水珠表现作为判断是否补充 DWR 的依据。持久泼水表面产品如 SHAKEDRY 没有纺织外层且无需 DWR，需执行特殊护理，不能以统一补涂方式处理。",
+          "source_url": "https://www.gore-tex.com/support/care/outerwear",
+          "source_name": "GORE-TEX Brand",
+          "topic": "wardrobe",
+          "retrieved_at": "2026-08-17",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Re-apply the DWR; Special Care",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "仅用于区分普通 GORE-TEX 与持久泼水表面产品的护理要求。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        }
+      ],
+      "rubric": "不推荐柔顺剂，保留技术产品与制造商洗标范围。",
+      "traces": [
+        {
+          "name": "care_guide",
+          "status": "success",
+          "summary": "{\"answer_status\": \"evidence_found\", \"attempts\": 1, \"care_boundary\": true, \"effective_query\": \"查一下普通GORE-TEX衣物洗护是否能加入柔顺剂\", \"evidence_ids\": [\"care-shell-liquid...",
+          "duration_ms": 0
+        }
+      ],
+      "duration_ms": 3.756,
+      "model_invocations": 0,
+      "rule_checks": {
+        "nonempty": true,
+        "required_text": true,
+        "forbidden_text_absent": true,
+        "forbidden_pattern_absent": true,
+        "citation_presence": true,
+        "citation_identity": true
+      },
+      "rule_pass": true,
+      "model_review": null
+    },
+    {
+      "id": "aq04",
+      "group": "wool-storage",
+      "question": "羊毛换季收纳前要做好哪些准备",
+      "answer": "叠放或收纳前，应确认衣物已经完全干燥；不能把仍有潮气的衣物直接收进衣柜。这里说明的是收纳前提，不是烘干许可。\n适用范围：洗后准备叠放或收纳的衣物\n限制：干燥方式以该件衣物洗标为准。\n来源：https://www.cleaninginstitute.org/cleaning-tips/clothes/laundry-basics\n羊毛长期收纳前应保持清洁，因为食物污渍和身体油脂会吸引衣蛾。Woolmark 建议清洁后再放入密闭袋或容器；使用防蛀用品时不要让其直接接触衣物。\n适用范围：羊毛长期收纳；清洁方式需另查洗标。\n限制：只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。\n来源：https://www.woolmark.com/care/care-for-wool/",
+      "sources": [
+        {
+          "id": "American Cleaning Institute",
+          "title": "完全干燥再收纳",
+          "url": "https://www.cleaninginstitute.org/cleaning-tips/clothes/laundry-basics"
+        },
+        {
+          "id": "Woolmark",
+          "title": "羊毛收纳前清洁",
+          "url": "https://www.woolmark.com/care/care-for-wool/"
+        }
+      ],
+      "references": [
+        {
+          "id": "storage-wool-clean",
+          "title": "羊毛收纳前清洁",
+          "content": "羊毛长期收纳前应保持清洁，因为食物污渍和身体油脂会吸引衣蛾。Woolmark 建议清洁后再放入密闭袋或容器；使用防蛀用品时不要让其直接接触衣物。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "storage",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Long-term storage",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "羊毛长期收纳；清洁方式需另查洗标。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        }
+      ],
+      "cited_source_records": [
+        {
+          "id": "fabric-wool-label",
+          "title": "羊毛先看洗标",
+          "content": "羊毛衣物清洗前先读取成衣洗标。Woolmark 提醒部分衣物要求仅干洗，不能只凭羊毛材质判断可机洗；缺少洗标时，应先向制造商确认适用护理方式。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "fabric",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Can you dry clean Merino wool?",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "羊毛成衣，具体护理仍由该件洗标限定。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        },
+        {
+          "id": "fabric-wool-heat",
+          "title": "羊毛避免高温",
+          "content": "羊毛衣物受潮后，Woolmark 建议在室温下干燥，避开直接日晒和热源。是否可以烘干须另看洗标，不能把自然干燥建议理解为所有羊毛衣物均可受热处理。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "fabric",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Dry away from direct sunlight or heat",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "受潮羊毛衣物的自然干燥。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        },
+        {
+          "id": "fabric-wool-shape",
+          "title": "羊毛保持版型",
+          "content": "Woolmark 建议羊毛衫洗后平放干燥，除非洗标明确允许烘干。羊毛针织品宜轻折收纳；梭织羊毛衣物则可使用有形状支撑或衬垫的衣架，二者不能混为同一方法。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "fabric",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Hang wovens, fold knits; How to dry a wool sweater",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "区分羊毛针织品与梭织品；受具体洗标限制。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        },
+        {
+          "id": "care-sort-before-wash",
+          "title": "清洗前分类",
+          "content": "清洗前按颜色、面料和洗护要求分类。白色衣物与深色衣物分开；新买、深色或鲜艳衣物在最初几次清洗时单独洗。",
+          "source_url": "https://www.cleaninginstitute.org/cleaning-tips/clothes/laundry-basics",
+          "source_name": "American Cleaning Institute",
+          "topic": "care",
+          "retrieved_at": "2026-10-28",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Step 1: Sort Your Laundry / Sort by color; Pro Tips for Best Laundry Results",
+          "review_note": "对照所列官方章节后重写中文摘要；删除未在该章节核对的扩展结论。非人工专家认证。",
+          "reviewed_at": "2026-10-28",
+          "reviewer": "codex-source-comparison",
+          "applicability": "可按衣物标签水洗的日常衣物",
+          "limitations": "不为仅限干洗或特殊涂层衣物指定洗涤程序。"
+        },
+        {
+          "id": "care-stain-before-dry",
+          "title": "污渍未除别烘",
+          "content": "洗后仍有污渍时，先不要烘干；按适用的去渍方法预处理并重新清洗，因为干燥可能使污渍固定。去渍前先核对衣物洗护要求。",
+          "source_url": "https://www.cleaninginstitute.org/cleaning-tips/clothes/laundry-basics",
+          "source_name": "American Cleaning Institute",
+          "topic": "care",
+          "retrieved_at": "2026-10-28",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Step 2: Treat and Remove Stains / Stain Removal Process",
+          "review_note": "对照所列官方章节后重写中文摘要；删除未在该章节核对的扩展结论。非人工专家认证。",
+          "reviewed_at": "2026-10-28",
+          "reviewer": "codex-source-comparison",
+          "applicability": "允许水洗且可按标签去渍的衣物",
+          "limitations": "不提供通用去渍配方，也不保证所有污渍能清除。"
+        },
+        {
+          "id": "storage-dry-before-fold",
+          "title": "完全干燥再收纳",
+          "content": "叠放或收纳前，应确认衣物已经完全干燥；不能把仍有潮气的衣物直接收进衣柜。这里说明的是收纳前提，不是烘干许可。",
+          "source_url": "https://www.cleaninginstitute.org/cleaning-tips/clothes/laundry-basics",
+          "source_name": "American Cleaning Institute",
+          "topic": "storage",
+          "retrieved_at": "2026-10-28",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Step 6: Fold and Put Clothes Away",
+          "review_note": "对照所列官方章节后重写中文摘要；删除未在该章节核对的扩展结论。非人工专家认证。",
+          "reviewed_at": "2026-10-28",
+          "reviewer": "codex-source-comparison",
+          "applicability": "洗后准备叠放或收纳的衣物",
+          "limitations": "干燥方式以该件衣物洗标为准。"
+        },
+        {
+          "id": "storage-fold-promptly",
+          "title": "洗后及时整理",
+          "content": "衣物完全干燥后及时折叠，有助于减少褶皱；仍潮湿时应先继续按洗标允许的方式干燥，再整理收纳，而不是直接叠好放入衣柜。",
+          "source_url": "https://www.cleaninginstitute.org/cleaning-tips/clothes/laundry-basics",
+          "source_name": "American Cleaning Institute",
+          "topic": "storage",
+          "retrieved_at": "2026-10-28",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Step 6: Fold and Put Clothes Away",
+          "review_note": "对照所列官方章节后重写中文摘要；删除未在该章节核对的扩展结论。非人工专家认证。",
+          "reviewed_at": "2026-10-28",
+          "reviewer": "codex-source-comparison",
+          "applicability": "适合折叠收纳的已干燥衣物",
+          "limitations": "不推导所有服装都应折叠，具体版型需另行核对。"
+        },
+        {
+          "id": "storage-wool-clean",
+          "title": "羊毛收纳前清洁",
+          "content": "羊毛长期收纳前应保持清洁，因为食物污渍和身体油脂会吸引衣蛾。Woolmark 建议清洁后再放入密闭袋或容器；使用防蛀用品时不要让其直接接触衣物。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "storage",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Long-term storage",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "羊毛长期收纳；清洁方式需另查洗标。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        },
+        {
+          "id": "care-wash-detergent-dose",
+          "title": "洗涤剂按说明用量",
+          "content": "洗衣时按洗涤剂的用量说明使用，并同时遵循衣物的洗护标签；加得更多不一定洗得更好。不要在缺少产品说明时给出统一毫升数。",
+          "source_url": "https://www.cleaninginstitute.org/cleaning-tips/clothes/laundry-basics",
+          "source_name": "American Cleaning Institute",
+          "topic": "care",
+          "retrieved_at": "2026-10-28",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Pro Tips for Best Laundry Results",
+          "review_note": "对照所列官方章节后重写中文摘要；删除未在该章节核对的扩展结论。非人工专家认证。",
+          "reviewed_at": "2026-10-28",
+          "reviewer": "codex-source-comparison",
+          "applicability": "一般家庭洗衣中的洗涤剂用量判断",
+          "limitations": "不替代具体产品、机型、水质或面料的专项说明。"
+        },
+        {
+          "id": "fabric-wool-moisture",
+          "title": "羊毛受潮先干燥",
+          "content": "羊毛衣物受潮后可在室温下干燥并避开直接日晒或热源。羊毛衫洗后通常平放干燥，仅在洗标允许时考虑烘干；这里的建议不等同于所有羊毛成衣都可水洗。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "fabric",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Dry away from direct sunlight or heat; How to dry a wool sweater",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "受潮或洗后的羊毛衣物；水洗许可另查洗标。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        },
+        {
+          "id": "wool-reverse",
+          "title": "羊毛衣物洗前翻面与分色",
+          "content": "Woolmark 建议清洗羊毛衣物前翻到反面，并分开深浅色以减少染色风险；清洗方式仍应先遵循衣物自身的洗护标签。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "care",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Caring for wool: opening paragraphs",
+          "review_note": "对照所标注的来源段落核对中文概述和适用限制；色彩理论仅作为可选思路。",
+          "reviewed_at": "2026-10-30",
+          "reviewer": "codex-source-comparison",
+          "applicability": "标签允许洗涤的羊毛衣物",
+          "limitations": "不适用于未知成分衣物；洗涤温度和方式以具体产品标签为准。"
+        },
+        {
+          "id": "wool-storage-prep",
+          "title": "羊毛衣物存放前整理",
+          "content": "Woolmark 建议羊毛衣物洗涤或收纳前清空口袋、取下腰带及饰品，并扣好纽扣或拉好拉链，以减少局部受力和变形。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "storage",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Caring for Wool",
+          "review_note": "对照所标注的来源段落核对中文概述和适用限制；色彩理论仅作为可选思路。",
+          "reviewed_at": "2026-10-30",
+          "reviewer": "codex-source-comparison",
+          "applicability": "羊毛衣物的洗前或收纳准备",
+          "limitations": "具体收纳方法还要参考款式、清洁状态及产品标签。"
+        },
+        {
+          "id": "wool-woven-brush",
+          "title": "梭织羊毛表面灰尘的处理",
+          "content": "Woolmark 建议仅对梭织羊毛衣物使用柔软衣刷，穿后沿织物长度方向轻刷表面灰尘；针织衣物不能直接套用这条建议。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "care",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Brushing",
+          "review_note": "对照所标注的来源段落核对中文概述和适用限制；色彩理论仅作为可选思路。",
+          "reviewed_at": "2026-10-30",
+          "reviewer": "codex-source-comparison",
+          "applicability": "梭织羊毛衣物的表面除尘",
+          "limitations": "不适用于未知织法、易损装饰或不允许刷拭的衣物；遵循产品说明。"
+        }
+      ],
+      "rubric": "清洁、充分干燥后收纳，不自行补充防虫药剂配方。",
+      "traces": [
+        {
+          "name": "rag_search",
+          "status": "success",
+          "summary": "{\"answer_status\": \"evidence_found\", \"attempts\": 1, \"care_boundary\": true, \"effective_query\": \"羊毛换季收纳前要做好哪些准备\", \"evidence_ids\": [\"storage-dry-before-fold\", \"s...",
+          "duration_ms": 0
+        }
+      ],
+      "duration_ms": 3.385,
+      "model_invocations": 0,
+      "rule_checks": {
+        "nonempty": true,
+        "required_text": true,
+        "forbidden_text_absent": true,
+        "forbidden_pattern_absent": true,
+        "citation_presence": true,
+        "citation_identity": true
+      },
+      "rule_pass": true,
+      "model_review": null
+    },
+    {
+      "id": "aq05",
+      "group": "size-concept",
+      "question": "知识库解释一下，成衣胸宽为何不能直接当我的胸围",
+      "answer": "UNIQLO 香港及澳门上装测量图把胸宽列为半胸宽：衣物完全平铺后，测量腋下左右侧缝之间的宽度。这是成衣的平铺宽度，不能把该数值直接当成人体胸围，也不能据此断言另一件衣物一定合身。\n适用范围：UNIQLO 香港及澳门该页面上装的平铺胸宽测量位置。\n限制：不适用于所有品牌、文胸或未采用相同测量方法的尺码表。",
+      "sources": [
+        {
+          "id": "UNIQLO Hong Kong & Macau Customer Service",
+          "title": "平铺胸宽不是人体胸围",
+          "url": "https://faq-hk.uniqlo.com/pkb_Home_UQ_HK?c=category_uq_tw:UQHK_C2&fs=Search&id=kA0Ie000000TOgx&l=en_US&pn=1"
+        }
+      ],
+      "references": [
+        {
+          "id": "size-flat-body-width",
+          "title": "平铺胸宽不是人体胸围",
+          "content": "UNIQLO 香港及澳门上装测量图把胸宽列为半胸宽：衣物完全平铺后，测量腋下左右侧缝之间的宽度。这是成衣的平铺宽度，不能把该数值直接当成人体胸围，也不能据此断言另一件衣物一定合身。",
+          "source_url": "https://faq-hk.uniqlo.com/pkb_Home_UQ_HK?c=category_uq_tw:UQHK_C2&fs=Search&id=kA0Ie000000TOgx&l=en_US&pn=1",
+          "source_name": "UNIQLO Hong Kong & Macau Customer Service",
+          "topic": "size",
+          "retrieved_at": "2026-10-29",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "How to Measure Product Size / Tops / B. Body Width (1/2 Chest Width)",
+          "review_note": "逐项核对指定官方网页文字章节后撰写中文摘要；非人工专家认证。未核对图片坐标以外的扩展测量方法。",
+          "reviewed_at": "2026-10-29",
+          "reviewer": "codex-source-comparison",
+          "applicability": "UNIQLO 香港及澳门该页面上装的平铺胸宽测量位置。",
+          "limitations": "不适用于所有品牌、文胸或未采用相同测量方法的尺码表。"
+        },
+        {
+          "id": "size-body-versus-product",
+          "title": "人体尺寸与商品尺寸区别",
+          "content": "UNIQLO 香港及澳门区分商品尺寸与人体尺寸：前者指衣物本身的实际尺寸，后者指不穿衣物时的人体测量尺寸。查看尺码表时先确认标注属于哪一种，不能把商品尺寸直接当作自己的身体尺寸。",
+          "source_url": "https://faq-hk.uniqlo.com/pkb_Home_UQ_HK?c=category_uq_tw:UQHK_C2&fs=Search&id=kA0Ie000000TOgx&l=en_US&pn=1",
+          "source_name": "UNIQLO Hong Kong & Macau Customer Service",
+          "topic": "size",
+          "retrieved_at": "2026-10-29",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Difference Between Product Measurements and Body Measurements",
+          "review_note": "逐项核对指定官方网页文字章节后撰写中文摘要；非人工专家认证。未核对图片坐标以外的扩展测量方法。",
+          "reviewed_at": "2026-10-29",
+          "reviewer": "codex-source-comparison",
+          "applicability": "UNIQLO 香港及澳门尺码表的两类测量标记。",
+          "limitations": "不提供跨品牌统一尺码、固定松量或仅凭身高体重的精确合身承诺。"
+        }
+      ],
+      "cited_source_records": [
+        {
+          "id": "size-measure-same-garment",
+          "title": "成衣尺寸平铺测量方法",
+          "content": "UNIQLO 香港及澳门的成衣尺寸说明要求，将衣物放在平整、干净的表面并抚平褶皱后测量。测量位置和褶皱会影响实测值；即使尺码标记相同，不同设计的穿着效果也可能不同，应核对具体商品尺码表。",
+          "source_url": "https://faq-hk.uniqlo.com/pkb_Home_UQ_HK?c=category_uq_tw:UQHK_C2&fs=Search&id=kA0Ie000000TOgx&l=en_US&pn=1",
+          "source_name": "UNIQLO Hong Kong & Macau Customer Service",
+          "topic": "size",
+          "retrieved_at": "2026-10-29",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "How to Measure Product Size (With Illustrations) / introductory notes",
+          "review_note": "逐项核对指定官方网页文字章节后撰写中文摘要；非人工专家认证。未核对图片坐标以外的扩展测量方法。",
+          "reviewed_at": "2026-10-29",
+          "reviewer": "codex-source-comparison",
+          "applicability": "UNIQLO 香港及澳门页面中的成衣测量说明。",
+          "limitations": "不能由此保证其他品牌采用相同测量位置或公差；不将结果换算为某个必然合身的尺码。"
+        },
+        {
+          "id": "size-body-versus-product",
+          "title": "人体尺寸与商品尺寸区别",
+          "content": "UNIQLO 香港及澳门区分商品尺寸与人体尺寸：前者指衣物本身的实际尺寸，后者指不穿衣物时的人体测量尺寸。查看尺码表时先确认标注属于哪一种，不能把商品尺寸直接当作自己的身体尺寸。",
+          "source_url": "https://faq-hk.uniqlo.com/pkb_Home_UQ_HK?c=category_uq_tw:UQHK_C2&fs=Search&id=kA0Ie000000TOgx&l=en_US&pn=1",
+          "source_name": "UNIQLO Hong Kong & Macau Customer Service",
+          "topic": "size",
+          "retrieved_at": "2026-10-29",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Difference Between Product Measurements and Body Measurements",
+          "review_note": "逐项核对指定官方网页文字章节后撰写中文摘要；非人工专家认证。未核对图片坐标以外的扩展测量方法。",
+          "reviewed_at": "2026-10-29",
+          "reviewer": "codex-source-comparison",
+          "applicability": "UNIQLO 香港及澳门尺码表的两类测量标记。",
+          "limitations": "不提供跨品牌统一尺码、固定松量或仅凭身高体重的精确合身承诺。"
+        },
+        {
+          "id": "size-flat-body-width",
+          "title": "平铺胸宽不是人体胸围",
+          "content": "UNIQLO 香港及澳门上装测量图把胸宽列为半胸宽：衣物完全平铺后，测量腋下左右侧缝之间的宽度。这是成衣的平铺宽度，不能把该数值直接当成人体胸围，也不能据此断言另一件衣物一定合身。",
+          "source_url": "https://faq-hk.uniqlo.com/pkb_Home_UQ_HK?c=category_uq_tw:UQHK_C2&fs=Search&id=kA0Ie000000TOgx&l=en_US&pn=1",
+          "source_name": "UNIQLO Hong Kong & Macau Customer Service",
+          "topic": "size",
+          "retrieved_at": "2026-10-29",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "How to Measure Product Size / Tops / B. Body Width (1/2 Chest Width)",
+          "review_note": "逐项核对指定官方网页文字章节后撰写中文摘要；非人工专家认证。未核对图片坐标以外的扩展测量方法。",
+          "reviewed_at": "2026-10-29",
+          "reviewer": "codex-source-comparison",
+          "applicability": "UNIQLO 香港及澳门该页面上装的平铺胸宽测量位置。",
+          "limitations": "不适用于所有品牌、文胸或未采用相同测量方法的尺码表。"
+        }
+      ],
+      "rubric": "区分平铺衣物尺寸和人体尺寸，不虚构特定款号数字。",
+      "traces": [
+        {
+          "name": "rag_search",
+          "status": "success",
+          "summary": "{\"answer_status\": \"evidence_found\", \"attempts\": 1, \"care_boundary\": false, \"effective_query\": \"知识库解释一下，成衣胸宽为何不能直接当我的胸围\", \"evidence_ids\": [\"size-flat-body-wid...",
+          "duration_ms": 0
+        }
+      ],
+      "duration_ms": 5.211,
+      "model_invocations": 0,
+      "rule_checks": {
+        "nonempty": true,
+        "required_text": true,
+        "forbidden_text_absent": true,
+        "forbidden_pattern_absent": true,
+        "citation_presence": true,
+        "citation_identity": true
+      },
+      "rule_pass": true,
+      "model_review": null
+    },
+    {
+      "id": "aq06",
+      "group": "trip-color",
+      "question": "知识库中出差带衣服时怎样减少颜色太多导致不好组合",
+      "answer": "旅行行李可以采用较简单的配色，使上衣和下装互相搭配，形成多套组合；选择何种颜色仍应以个人喜好和活动安排为准。\n适用范围：旅行打包和减少重复衣物\n限制：配色是可选策略，不要求所有人只能穿中性色。",
+      "sources": [
+        {
+          "id": "REI Co-op",
+          "title": "旅行轻装：上下装互相搭配",
+          "url": "https://www.rei.com/learn/expert-advice/traveling-light.html"
+        }
+      ],
+      "references": [
+        {
+          "id": "travel-mix",
+          "title": "旅行轻装：上下装互相搭配",
+          "content": "旅行行李可以采用较简单的配色，使上衣和下装互相搭配，形成多套组合；选择何种颜色仍应以个人喜好和活动安排为准。",
+          "source_url": "https://www.rei.com/learn/expert-advice/traveling-light.html",
+          "source_name": "REI Co-op",
+          "topic": "wardrobe",
+          "retrieved_at": "2026-10-30",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Pick Neutral Colors",
+          "review_note": "对照所标注的来源段落核对中文概述和适用限制；色彩理论仅作为可选思路。",
+          "reviewed_at": "2026-10-30",
+          "reviewer": "codex-source-comparison",
+          "applicability": "旅行打包和减少重复衣物",
+          "limitations": "配色是可选策略，不要求所有人只能穿中性色。"
+        }
+      ],
+      "cited_source_records": [
+        {
+          "id": "travel-mix",
+          "title": "旅行轻装：上下装互相搭配",
+          "content": "旅行行李可以采用较简单的配色，使上衣和下装互相搭配，形成多套组合；选择何种颜色仍应以个人喜好和活动安排为准。",
+          "source_url": "https://www.rei.com/learn/expert-advice/traveling-light.html",
+          "source_name": "REI Co-op",
+          "topic": "wardrobe",
+          "retrieved_at": "2026-10-30",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Pick Neutral Colors",
+          "review_note": "对照所标注的来源段落核对中文概述和适用限制；色彩理论仅作为可选思路。",
+          "reviewed_at": "2026-10-30",
+          "reviewer": "codex-source-comparison",
+          "applicability": "旅行打包和减少重复衣物",
+          "limitations": "配色是可选策略，不要求所有人只能穿中性色。"
+        },
+        {
+          "id": "travel-activities",
+          "title": "旅行打包根据行程增减衣物",
+          "content": "旅行准备衣物时，除了日常上下装，还应按目的地和活动调整，例如有游泳或下雨行程时考虑泳装或雨具，并结合洗衣机会决定数量。",
+          "source_url": "https://www.rei.com/learn/expert-advice/traveling-light.html",
+          "source_name": "REI Co-op",
+          "topic": "scenario",
+          "retrieved_at": "2026-10-30",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "What to Pack",
+          "review_note": "对照所标注的来源段落核对中文概述和适用限制；色彩理论仅作为可选思路。",
+          "reviewed_at": "2026-10-30",
+          "reviewer": "codex-source-comparison",
+          "applicability": "旅行行李和多活动行程",
+          "limitations": "没有适用于所有人的固定件数；需要考虑气候、行程与洗衣条件。"
+        },
+        {
+          "id": "travel-layers",
+          "title": "旅行选择可调节的衣物",
+          "content": "旅行时可考虑采用分层方式，通过增减衣物适应不同天气和室内外温差，并结合具体行程选择雨具或保暖外层。",
+          "source_url": "https://www.rei.com/learn/expert-advice/traveling-light.html",
+          "source_name": "REI Co-op",
+          "topic": "scenario",
+          "retrieved_at": "2026-10-30",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Layer Your Clothes",
+          "review_note": "对照所标注的来源段落核对中文概述和适用限制；色彩理论仅作为可选思路。",
+          "reviewed_at": "2026-10-30",
+          "reviewer": "codex-source-comparison",
+          "applicability": "旅行途中气候或室内外温差变化",
+          "limitations": "是否需要保暖或防水层应根据预报和目的地决定。"
+        }
+      ],
+      "rubric": "用简化主色方便组合，并保留个人偏好，不伪装成强制规则。",
+      "traces": [
+        {
+          "name": "rag_search",
+          "status": "success",
+          "summary": "{\"answer_status\": \"evidence_found\", \"attempts\": 1, \"care_boundary\": false, \"effective_query\": \"知识库中出差带衣服时怎样减少颜色太多导致不好组合\", \"evidence_ids\": [\"travel-mix\", \"col...",
+          "duration_ms": 0
+        }
+      ],
+      "duration_ms": 5.303,
+      "model_invocations": 0,
+      "rule_checks": {
+        "nonempty": true,
+        "required_text": true,
+        "forbidden_text_absent": true,
+        "forbidden_pattern_absent": true,
+        "citation_presence": true,
+        "citation_identity": true
+      },
+      "rule_pass": true,
+      "model_review": null
+    },
+    {
+      "id": "aq07",
+      "group": "interview-neat",
+      "question": "知识库里参加招聘会前怎样检查衣服是否整洁",
+      "answer": "面试或招聘会前可检查衣服是否有明显污渍、破损或宠物毛，并按洗护标签允许的方式处理褶皱；香味和饰品也可根据场合控制。\n适用范围：面试和招聘会着装检查\n限制：着装规范因组织和文化而异；熨烫或蒸汽处理必须先看洗护标签。",
+      "sources": [
+        {
+          "id": "UC Davis Career Center",
+          "title": "面试前检查衣物整洁",
+          "url": "https://careercenter.ucdavis.edu/interviews-and-offers/what-to-wear"
+        }
+      ],
+      "references": [
+        {
+          "id": "interview-neat",
+          "title": "面试前检查衣物整洁",
+          "content": "面试或招聘会前可检查衣服是否有明显污渍、破损或宠物毛，并按洗护标签允许的方式处理褶皱；香味和饰品也可根据场合控制。",
+          "source_url": "https://careercenter.ucdavis.edu/interviews-and-offers/what-to-wear",
+          "source_name": "UC Davis Career Center",
+          "topic": "scenario",
+          "retrieved_at": "2026-10-30",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Things to Consider When Choosing Professional Attire: Dress simply",
+          "review_note": "对照所标注的来源段落核对中文概述和适用限制；色彩理论仅作为可选思路。",
+          "reviewed_at": "2026-10-30",
+          "reviewer": "codex-source-comparison",
+          "applicability": "面试和招聘会着装检查",
+          "limitations": "着装规范因组织和文化而异；熨烫或蒸汽处理必须先看洗护标签。"
+        }
+      ],
+      "cited_source_records": [
+        {
+          "id": "interview-comfort",
+          "title": "面试穿搭兼顾天气与舒适",
+          "content": "面试或招聘会选择衣服时，可同时考虑季节天气与个人舒适度；尺寸过大或过小可能让人反复整理衣物，影响专注。",
+          "source_url": "https://careercenter.ucdavis.edu/interviews-and-offers/what-to-wear",
+          "source_name": "UC Davis Career Center",
+          "topic": "scenario",
+          "retrieved_at": "2026-10-30",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Things to Consider When Choosing Professional Attire: Dress comfortably",
+          "review_note": "对照所标注的来源段落核对中文概述和适用限制；色彩理论仅作为可选思路。",
+          "reviewed_at": "2026-10-30",
+          "reviewer": "codex-source-comparison",
+          "applicability": "面试和招聘会着装",
+          "limitations": "具体正式程度应结合公司文化、岗位及个人需求；不是必须购买正装。"
+        },
+        {
+          "id": "interview-neat",
+          "title": "面试前检查衣物整洁",
+          "content": "面试或招聘会前可检查衣服是否有明显污渍、破损或宠物毛，并按洗护标签允许的方式处理褶皱；香味和饰品也可根据场合控制。",
+          "source_url": "https://careercenter.ucdavis.edu/interviews-and-offers/what-to-wear",
+          "source_name": "UC Davis Career Center",
+          "topic": "scenario",
+          "retrieved_at": "2026-10-30",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Things to Consider When Choosing Professional Attire: Dress simply",
+          "review_note": "对照所标注的来源段落核对中文概述和适用限制；色彩理论仅作为可选思路。",
+          "reviewed_at": "2026-10-30",
+          "reviewer": "codex-source-comparison",
+          "applicability": "面试和招聘会着装检查",
+          "limitations": "着装规范因组织和文化而异；熨烫或蒸汽处理必须先看洗护标签。"
+        },
+        {
+          "id": "interview-expression",
+          "title": "职业场合穿搭保留个人选择",
+          "content": "职业场合的着装具有个人性，选择时可兼顾专业形象、天气和舒适度；具体穿什么应结合活动要求和个人偏好，不必套用性别固定模板。",
+          "source_url": "https://careercenter.ucdavis.edu/interviews-and-offers/what-to-wear",
+          "source_name": "UC Davis Career Center",
+          "topic": "style",
+          "retrieved_at": "2026-10-30",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "What to Wear; Things to Consider",
+          "review_note": "对照所标注的来源段落核对中文概述和适用限制；色彩理论仅作为可选思路。",
+          "reviewed_at": "2026-10-30",
+          "reviewer": "codex-source-comparison",
+          "applicability": "面试、招聘会等职业场合",
+          "limitations": "来源提供一般职业着装建议，不构成适用于所有行业的统一规定。"
+        }
+      ],
+      "rubric": "检查整洁与洗标允许的整理，避免性别刻板强制着装。",
+      "traces": [
+        {
+          "name": "rag_search",
+          "status": "success",
+          "summary": "{\"answer_status\": \"evidence_found\", \"attempts\": 1, \"care_boundary\": false, \"effective_query\": \"知识库里参加招聘会前怎样检查衣服是否整洁\", \"evidence_ids\": [\"interview-neat\", \"int...",
+          "duration_ms": 15
+        }
+      ],
+      "duration_ms": 4.934,
+      "model_invocations": 0,
+      "rule_checks": {
+        "nonempty": true,
+        "required_text": true,
+        "forbidden_text_absent": true,
+        "forbidden_pattern_absent": true,
+        "citation_presence": true,
+        "citation_identity": true
+      },
+      "rule_pass": true,
+      "model_review": null
+    },
+    {
+      "id": "aq08",
+      "group": "layer-role",
+      "question": "请查询户外穿搭里中间层的主要职责",
+      "answer": "户外分层中的中间层主要负责保留体热。可以根据气温、运动强度和休息状态增减保暖层，避免过热后大量出汗。\n适用范围：户外活动的保暖层选择\n限制：保暖效果受材质、风雨、个人体感及活动强度影响。",
+      "sources": [
+        {
+          "id": "REI Expert Advice",
+          "title": "户外分层：中间层保暖",
+          "url": "https://www.rei.com/learn/expert-advice/layering-basics.html"
+        }
+      ],
+      "references": [
+        {
+          "id": "layer-mid",
+          "title": "户外分层：中间层保暖",
+          "content": "户外分层中的中间层主要负责保留体热。可以根据气温、运动强度和休息状态增减保暖层，避免过热后大量出汗。",
+          "source_url": "https://www.rei.com/learn/expert-advice/layering-basics.html",
+          "source_name": "REI Expert Advice",
+          "topic": "weather",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Middle Layer: Insulation",
+          "review_note": "对照所标注的来源段落核对中文概述和适用限制；色彩理论仅作为可选思路。",
+          "reviewed_at": "2026-10-30",
+          "reviewer": "codex-source-comparison",
+          "applicability": "户外活动的保暖层选择",
+          "limitations": "保暖效果受材质、风雨、个人体感及活动强度影响。"
+        }
+      ],
+      "cited_source_records": [
+        {
+          "id": "layer-base",
+          "title": "户外分层：内层贴身层排汗",
+          "content": "户外活动分层时，内层贴身层主要负责把汗水从皮肤表面带走；天气冷或活动出汗时，应根据个人舒适度和活动量选择适合的贴身层。",
+          "source_url": "https://www.rei.com/learn/expert-advice/layering-basics.html",
+          "source_name": "REI Expert Advice",
+          "topic": "weather",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Base Layer: Moisture Management",
+          "review_note": "对照所标注的来源段落核对中文概述和适用限制；色彩理论仅作为可选思路。",
+          "reviewed_at": "2026-10-30",
+          "reviewer": "codex-source-comparison",
+          "applicability": "户外活动的贴身层选择",
+          "limitations": "不同面料和个人出汗量不同；不是任何材质都能保证干爽。"
+        },
+        {
+          "id": "layer-mid",
+          "title": "户外分层：中间层保暖",
+          "content": "户外分层中的中间层主要负责保留体热。可以根据气温、运动强度和休息状态增减保暖层，避免过热后大量出汗。",
+          "source_url": "https://www.rei.com/learn/expert-advice/layering-basics.html",
+          "source_name": "REI Expert Advice",
+          "topic": "weather",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Middle Layer: Insulation",
+          "review_note": "对照所标注的来源段落核对中文概述和适用限制；色彩理论仅作为可选思路。",
+          "reviewed_at": "2026-10-30",
+          "reviewer": "codex-source-comparison",
+          "applicability": "户外活动的保暖层选择",
+          "limitations": "保暖效果受材质、风雨、个人体感及活动强度影响。"
+        },
+        {
+          "id": "layer-shell",
+          "title": "户外分层：外层挡风雨",
+          "content": "户外分层的外层主要阻挡风雨；需要区分防水透气外套与仅防小雨的防泼水外套，雨势较大时不能把两者视为等效。",
+          "source_url": "https://www.rei.com/learn/expert-advice/layering-basics.html",
+          "source_name": "REI Expert Advice",
+          "topic": "weather",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Outer Layer: Rain and Wind Protection",
+          "review_note": "对照所标注的来源段落核对中文概述和适用限制；色彩理论仅作为可选思路。",
+          "reviewed_at": "2026-10-30",
+          "reviewer": "codex-source-comparison",
+          "applicability": "户外防风防雨外层选择",
+          "limitations": "具体防水、透气性能以产品说明及实际条件为准。"
+        },
+        {
+          "id": "layer-adjust",
+          "title": "温差与活动量变化时调整衣层",
+          "content": "户外穿搭不能只看气温：活动强度和个人体感也会影响保暖需求。走热后可减少衣层，停下休息变冷时再增加保暖层。",
+          "source_url": "https://www.rei.com/learn/expert-advice/layering-basics.html",
+          "source_name": "REI Expert Advice",
+          "topic": "weather",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Cold, Rainy and Hot Layering Examples",
+          "review_note": "对照所标注的来源段落核对中文概述和适用限制；色彩理论仅作为可选思路。",
+          "reviewed_at": "2026-10-30",
+          "reviewer": "codex-source-comparison",
+          "applicability": "温差较大或活动强度变化的户外出行",
+          "limitations": "不是具体温度穿衣公式；恶劣天气应结合当地预警和装备要求。"
+        }
+      ],
+      "rubric": "说明中间层保暖及可调整，不把厚度等同具体温度保证。",
+      "traces": [
+        {
+          "name": "rag_search",
+          "status": "success",
+          "summary": "{\"answer_status\": \"evidence_found\", \"attempts\": 1, \"care_boundary\": false, \"effective_query\": \"请查询户外穿搭里中间层的主要职责\", \"evidence_ids\": [\"layer-mid\", \"layer-shell\"...",
+          "duration_ms": 0
+        }
+      ],
+      "duration_ms": 4.877,
+      "model_invocations": 0,
+      "rule_checks": {
+        "nonempty": true,
+        "required_text": true,
+        "forbidden_text_absent": true,
+        "forbidden_pattern_absent": true,
+        "citation_presence": true,
+        "citation_identity": true
+      },
+      "rule_pass": true,
+      "model_review": null
+    },
+    {
+      "id": "aq09",
+      "group": "unknown-fibre",
+      "question": "这件衣物标着三醋酸，尚未找到洗标，如何清洗",
+      "answer": "当前没有足够适用的洗护资料；请提供这件衣物的成分、洗标或厂家护理说明。",
+      "sources": [],
+      "references": [],
+      "cited_source_records": [],
+      "rubric": "不能从未知材料借用羊毛或功能外套操作，补充条件。",
+      "traces": [
+        {
+          "name": "care_guide",
+          "status": "success",
+          "summary": "{\"answer_status\": \"not_found\", \"attempts\": 2, \"care_boundary\": true, \"effective_query\": \"这件衣物标着三醋酸，尚未找到洗标，如何清洗 相关资料\", \"evidence_ids\": [], \"information_proven...",
+          "duration_ms": 16
+        }
+      ],
+      "duration_ms": 4.737,
+      "model_invocations": 0,
+      "rule_checks": {
+        "nonempty": true,
+        "required_text": true,
+        "forbidden_text_absent": true,
+        "forbidden_pattern_absent": true,
+        "citation_presence": true,
+        "citation_identity": true
+      },
+      "rule_pass": true,
+      "model_review": null
+    },
+    {
+      "id": "aq10",
+      "group": "acrylic",
+      "question": "腈纶外套可以照羊毛那套方法洗吗",
+      "answer": "当前没有足够适用的洗护资料；请提供这件衣物的成分、洗标或厂家护理说明。",
+      "sources": [],
+      "references": [],
+      "cited_source_records": [],
+      "rubric": "不把提到的羊毛参考对象当作当前材料，不自动授权处理。",
+      "traces": [
+        {
+          "name": "care_guide",
+          "status": "success",
+          "summary": "{\"answer_status\": \"not_found\", \"attempts\": 2, \"care_boundary\": true, \"effective_query\": \"腈纶外套可以照羊毛那套方法洗\", \"evidence_ids\": [], \"information_provenance\": \"none...",
+          "duration_ms": 0
+        }
+      ],
+      "duration_ms": 3.953,
+      "model_invocations": 0,
+      "rule_checks": {
+        "nonempty": true,
+        "required_text": true,
+        "forbidden_text_absent": true,
+        "forbidden_pattern_absent": true,
+        "citation_presence": true,
+        "citation_identity": true
+      },
+      "rule_pass": true,
+      "model_review": null
+    },
+    {
+      "id": "aq11",
+      "group": "blend-permission",
+      "question": "60%羊毛40%涤纶还有皮革饰片，能整件放进洗衣机吗",
+      "answer": "仅凭一种纤维的通用建议，无法确认混纺、衬里或装饰所在整件衣物的处理许可。请提供整件洗标和厂家说明后再判断。",
+      "sources": [],
+      "references": [
+        {
+          "id": "care-label-complete",
+          "title": "整件衣物都要考虑洗护",
+          "content": "FTC 的护理说明问答指出，整件衣物的衬里、装饰和其他部件都要纳入护理考虑；需要不同处理方式的可拆卸内衬须单独说明。不能只凭表层面料，忽略整件成衣的洗护标签和部件警告。",
+          "source_url": "https://www.ftc.gov/business-guidance/resources/clothes-captioning-complying-care-labeling-rule",
+          "source_name": "美国联邦贸易委员会 FTC",
+          "topic": "care",
+          "retrieved_at": "2026-10-29",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "FAQs / Label Content / Does a care instruction have to consider components like linings, trim, buttons or zippers?",
+          "review_note": "逐项核对指定官方网页文字章节后撰写中文摘要；非人工专家认证。未核对图片坐标以外的扩展测量方法。",
+          "reviewed_at": "2026-10-29",
+          "reviewer": "codex-source-comparison",
+          "applicability": "服装护理对象与部件说明；摘录 FTC 问答中的护理原则。",
+          "limitations": "不提供法律合规判断；不据此给未知成衣指定洗涤、漂白或烘干程序。"
+        },
+        {
+          "id": "fabric-wool-label",
+          "title": "羊毛先看洗标",
+          "content": "羊毛衣物清洗前先读取成衣洗标。Woolmark 提醒部分衣物要求仅干洗，不能只凭羊毛材质判断可机洗；缺少洗标时，应先向制造商确认适用护理方式。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "fabric",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Can you dry clean Merino wool?",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "羊毛成衣，具体护理仍由该件洗标限定。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        }
+      ],
+      "cited_source_records": [],
+      "rubric": "区分整件衣物结构，通用材料背景不能建立机洗许可。",
+      "traces": [
+        {
+          "name": "care_guide",
+          "status": "success",
+          "summary": "{\"answer_status\": \"needs_clarification\", \"attempts\": 1, \"care_boundary\": true, \"effective_query\": \"60%羊毛40%涤纶还有皮革饰片，能整件放进洗衣机吗\", \"evidence_ids\": [], \"informat...",
+          "duration_ms": 0
+        }
+      ],
+      "duration_ms": 3.312,
+      "model_invocations": 0,
+      "rule_checks": {
+        "nonempty": true,
+        "required_text": true,
+        "forbidden_text_absent": true,
+        "forbidden_pattern_absent": true,
+        "citation_presence": true,
+        "citation_identity": true
+      },
+      "rule_pass": true,
+      "model_review": null
+    },
+    {
+      "id": "aq12",
+      "group": "label-no-dryer",
+      "question": "洗标写着不可烘干，可否换成低温烘十分钟",
+      "answer": "你提供的洗标说明是不可烘干，请遵守这一限制；降低温度或缩短时间不构成烘干许可。若洗标含义有疑问，请向厂家核实。",
+      "sources": [],
+      "references": [],
+      "cited_source_records": [],
+      "rubric": "保留用户明确的限制，不能把低温当作授权例外。",
+      "traces": [
+        {
+          "name": "care_guide",
+          "status": "success",
+          "summary": "{\"answer_status\": \"needs_clarification\", \"attempts\": 1, \"care_boundary\": true, \"effective_query\": \"洗标写着不可烘干，可否换成低温烘十分钟\", \"evidence_ids\": [], \"information_pro...",
+          "duration_ms": 0
+        }
+      ],
+      "duration_ms": 4.623,
+      "model_invocations": 0,
+      "rule_checks": {
+        "nonempty": true,
+        "required_text": true,
+        "forbidden_text_absent": true,
+        "forbidden_pattern_absent": true,
+        "citation_presence": true,
+        "citation_identity": true
+      },
+      "rule_pass": true,
+      "model_review": null
+    },
+    {
+      "id": "aq13",
+      "group": "label-only-dryclean",
+      "question": "这件羊毛衣物的洗标明确注明只能专业干洗，我可以手洗吗",
+      "answer": "你提供的洗标要求只能专业干洗，请遵循该件标签；通用羊毛资料不能据此授权手洗或机洗。可向厂家核实专业护理要求。",
+      "sources": [],
+      "references": [
+        {
+          "id": "fabric-wool-label",
+          "title": "羊毛先看洗标",
+          "content": "羊毛衣物清洗前先读取成衣洗标。Woolmark 提醒部分衣物要求仅干洗，不能只凭羊毛材质判断可机洗；缺少洗标时，应先向制造商确认适用护理方式。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "fabric",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Can you dry clean Merino wool?",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "羊毛成衣，具体护理仍由该件洗标限定。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        }
+      ],
+      "cited_source_records": [],
+      "rubric": "尊重该产品洗标，通用羊毛知识不能推翻限制。",
+      "traces": [
+        {
+          "name": "care_guide",
+          "status": "success",
+          "summary": "{\"answer_status\": \"needs_clarification\", \"attempts\": 1, \"care_boundary\": true, \"effective_query\": \"这件羊毛衣物的洗标明确注明只能专业干洗，我可以手洗吗\", \"evidence_ids\": [], \"informat...",
+          "duration_ms": 0
+        }
+      ],
+      "duration_ms": 3.358,
+      "model_invocations": 0,
+      "rule_checks": {
+        "nonempty": true,
+        "required_text": true,
+        "forbidden_text_absent": true,
+        "forbidden_pattern_absent": true,
+        "citation_presence": true,
+        "citation_identity": true
+      },
+      "rule_pass": true,
+      "model_review": null
+    },
+    {
+      "id": "aq14",
+      "group": "exact-product",
+      "question": "知识库能查到晨岚A73大衣L码的袖长是多少厘米吗",
+      "answer": "当前资料没有这款产品的具体尺寸数据。请提供准确品牌、款号及对应尺码表或测量数据；通用量衣指南不能代替该款数据。",
+      "sources": [],
+      "references": [],
+      "cited_source_records": [],
+      "rubric": "没有该款数据时明确缺失，不用通用测量知识填数。",
+      "traces": [
+        {
+          "name": "rag_search",
+          "status": "success",
+          "summary": "{\"answer_status\": \"needs_clarification\", \"attempts\": 1, \"care_boundary\": false, \"effective_query\": \"知识库能查到晨岚A73大衣L码的袖长是多少厘米吗\", \"evidence_ids\": [], \"informati...",
+          "duration_ms": 0
+        }
+      ],
+      "duration_ms": 4.491,
+      "model_invocations": 0,
+      "rule_checks": {
+        "nonempty": true,
+        "required_text": true,
+        "forbidden_text_absent": true,
+        "forbidden_pattern_absent": true,
+        "citation_presence": true,
+        "citation_identity": true
+      },
+      "rule_pass": true,
+      "model_review": null
+    },
+    {
+      "id": "aq15",
+      "group": "missing-silk",
+      "question": "真丝连衣裙怎么洗护，需要选什么洗涤程序",
+      "answer": "当前没有足够适用的洗护资料；请提供这件衣物的成分、洗标或厂家护理说明。",
+      "sources": [],
+      "references": [],
+      "cited_source_records": [],
+      "rubric": "当前语料缺少已发布真丝材料处理事实，不编造程序。",
+      "traces": [
+        {
+          "name": "care_guide",
+          "status": "success",
+          "summary": "{\"answer_status\": \"not_found\", \"attempts\": 2, \"care_boundary\": true, \"effective_query\": \"真丝连衣裙怎么洗护，需要选什么洗涤程序 相关资料\", \"evidence_ids\": [], \"information_provenan...",
+          "duration_ms": 0
+        }
+      ],
+      "duration_ms": 4.383,
+      "model_invocations": 0,
+      "rule_checks": {
+        "nonempty": true,
+        "required_text": true,
+        "forbidden_text_absent": true,
+        "forbidden_pattern_absent": true,
+        "citation_presence": true,
+        "citation_identity": true
+      },
+      "rule_pass": true,
+      "model_review": null
+    },
+    {
+      "id": "aq16",
+      "group": "missing-down",
+      "question": "羽绒衣清洗后应该烘干多久",
+      "answer": "当前没有足够适用的洗护资料；请提供这件衣物的成分、洗标或厂家护理说明。",
+      "sources": [],
+      "references": [],
+      "cited_source_records": [],
+      "rubric": "不虚构烘干分钟数，说明需要该件说明。",
+      "traces": [
+        {
+          "name": "care_guide",
+          "status": "success",
+          "summary": "{\"answer_status\": \"not_found\", \"attempts\": 2, \"care_boundary\": true, \"effective_query\": \"羽绒衣清洗后应该烘干多久 相关资料\", \"evidence_ids\": [], \"information_provenance\": \"n...",
+          "duration_ms": 0
+        }
+      ],
+      "duration_ms": 4.155,
+      "model_invocations": 0,
+      "rule_checks": {
+        "nonempty": true,
+        "required_text": true,
+        "forbidden_text_absent": true,
+        "forbidden_pattern_absent": true,
+        "citation_presence": true,
+        "citation_identity": true
+      },
+      "rule_pass": true,
+      "model_review": null
+    },
+    {
+      "id": "aq17",
+      "group": "selected-unknown",
+      "question": "这件如何洗护",
+      "answer": "关于「试用上衣」（已记录材质：醋酸）：\n当前没有足够适用的洗护资料；请提供这件衣物的成分、洗标或厂家护理说明。\n请以整件衣物的洗护标签为准。",
+      "sources": [],
+      "references": [],
+      "cited_source_records": [],
+      "rubric": "已记录材料仍需同样边界，不能复用羊毛洗护。",
+      "traces": [
+        {
+          "name": "get_garment",
+          "status": "success",
+          "summary": "{\"found\": true, \"garment\": {\"category\": \"上装\", \"confidence\": {}, \"created_at\": \"2024-01-01T00:00:00\", \"id\": \"quality-item\", \"material\": \"醋酸\", \"name\": \"试用上衣\", ...",
+          "duration_ms": 0
+        },
+        {
+          "name": "care_guide",
+          "status": "success",
+          "summary": "{\"answer_status\": \"not_found\", \"attempts\": 2, \"care_boundary\": true, \"effective_query\": \"这件如何洗护 用户记录的衣物材质：醋酸 相关资料\", \"evidence_ids\": [], \"information_provenan...",
+          "duration_ms": 0
+        }
+      ],
+      "duration_ms": 4.882,
+      "model_invocations": 0,
+      "rule_checks": {
+        "nonempty": true,
+        "required_text": true,
+        "forbidden_text_absent": true,
+        "forbidden_pattern_absent": true,
+        "citation_presence": true,
+        "citation_identity": true
+      },
+      "rule_pass": true,
+      "model_review": null
+    },
+    {
+      "id": "aq18",
+      "group": "selected-wool",
+      "question": "这件怎么洗护",
+      "answer": "关于「试用上衣」（已记录材质：羊毛）：\n羊毛衣物清洗前先读取成衣洗标。Woolmark 提醒部分衣物要求仅干洗，不能只凭羊毛材质判断可机洗；缺少洗标时，应先向制造商确认适用护理方式。\n适用范围：羊毛成衣，具体护理仍由该件洗标限定。\n限制：只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。\n来源：https://www.woolmark.com/care/care-for-wool/\nWoolmark 建议清洗羊毛衣物前翻到反面，并分开深浅色以减少染色风险；清洗方式仍应先遵循衣物自身的洗护标签。\n适用范围：标签允许洗涤的羊毛衣物\n限制：不适用于未知成分衣物；洗涤温度和方式以具体产品标签为准。\n来源：https://www.woolmark.com/care/care-for-wool/\n请以整件衣物的洗护标签为准。",
+      "sources": [
+        {
+          "id": "Woolmark",
+          "title": "羊毛先看洗标",
+          "url": "https://www.woolmark.com/care/care-for-wool/"
+        }
+      ],
+      "references": [
+        {
+          "id": "wool-reverse",
+          "title": "羊毛衣物洗前翻面与分色",
+          "content": "Woolmark 建议清洗羊毛衣物前翻到反面，并分开深浅色以减少染色风险；清洗方式仍应先遵循衣物自身的洗护标签。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "care",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Caring for wool: opening paragraphs",
+          "review_note": "对照所标注的来源段落核对中文概述和适用限制；色彩理论仅作为可选思路。",
+          "reviewed_at": "2026-10-30",
+          "reviewer": "codex-source-comparison",
+          "applicability": "标签允许洗涤的羊毛衣物",
+          "limitations": "不适用于未知成分衣物；洗涤温度和方式以具体产品标签为准。"
+        },
+        {
+          "id": "fabric-wool-label",
+          "title": "羊毛先看洗标",
+          "content": "羊毛衣物清洗前先读取成衣洗标。Woolmark 提醒部分衣物要求仅干洗，不能只凭羊毛材质判断可机洗；缺少洗标时，应先向制造商确认适用护理方式。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "fabric",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Can you dry clean Merino wool?",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "羊毛成衣，具体护理仍由该件洗标限定。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        },
+        {
+          "id": "wool-storage-prep",
+          "title": "羊毛衣物存放前整理",
+          "content": "Woolmark 建议羊毛衣物洗涤或收纳前清空口袋、取下腰带及饰品，并扣好纽扣或拉好拉链，以减少局部受力和变形。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "storage",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Caring for Wool",
+          "review_note": "对照所标注的来源段落核对中文概述和适用限制；色彩理论仅作为可选思路。",
+          "reviewed_at": "2026-10-30",
+          "reviewer": "codex-source-comparison",
+          "applicability": "羊毛衣物的洗前或收纳准备",
+          "limitations": "具体收纳方法还要参考款式、清洁状态及产品标签。"
+        }
+      ],
+      "cited_source_records": [
+        {
+          "id": "fabric-wool-label",
+          "title": "羊毛先看洗标",
+          "content": "羊毛衣物清洗前先读取成衣洗标。Woolmark 提醒部分衣物要求仅干洗，不能只凭羊毛材质判断可机洗；缺少洗标时，应先向制造商确认适用护理方式。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "fabric",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Can you dry clean Merino wool?",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "羊毛成衣，具体护理仍由该件洗标限定。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        },
+        {
+          "id": "fabric-wool-heat",
+          "title": "羊毛避免高温",
+          "content": "羊毛衣物受潮后，Woolmark 建议在室温下干燥，避开直接日晒和热源。是否可以烘干须另看洗标，不能把自然干燥建议理解为所有羊毛衣物均可受热处理。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "fabric",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Dry away from direct sunlight or heat",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "受潮羊毛衣物的自然干燥。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        },
+        {
+          "id": "fabric-wool-shape",
+          "title": "羊毛保持版型",
+          "content": "Woolmark 建议羊毛衫洗后平放干燥，除非洗标明确允许烘干。羊毛针织品宜轻折收纳；梭织羊毛衣物则可使用有形状支撑或衬垫的衣架，二者不能混为同一方法。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "fabric",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Hang wovens, fold knits; How to dry a wool sweater",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "区分羊毛针织品与梭织品；受具体洗标限制。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        },
+        {
+          "id": "storage-wool-clean",
+          "title": "羊毛收纳前清洁",
+          "content": "羊毛长期收纳前应保持清洁，因为食物污渍和身体油脂会吸引衣蛾。Woolmark 建议清洁后再放入密闭袋或容器；使用防蛀用品时不要让其直接接触衣物。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "storage",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Long-term storage",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "羊毛长期收纳；清洁方式需另查洗标。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        },
+        {
+          "id": "fabric-wool-moisture",
+          "title": "羊毛受潮先干燥",
+          "content": "羊毛衣物受潮后可在室温下干燥并避开直接日晒或热源。羊毛衫洗后通常平放干燥，仅在洗标允许时考虑烘干；这里的建议不等同于所有羊毛成衣都可水洗。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "fabric",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Dry away from direct sunlight or heat; How to dry a wool sweater",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "受潮或洗后的羊毛衣物；水洗许可另查洗标。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        },
+        {
+          "id": "wool-reverse",
+          "title": "羊毛衣物洗前翻面与分色",
+          "content": "Woolmark 建议清洗羊毛衣物前翻到反面，并分开深浅色以减少染色风险；清洗方式仍应先遵循衣物自身的洗护标签。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "care",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Caring for wool: opening paragraphs",
+          "review_note": "对照所标注的来源段落核对中文概述和适用限制；色彩理论仅作为可选思路。",
+          "reviewed_at": "2026-10-30",
+          "reviewer": "codex-source-comparison",
+          "applicability": "标签允许洗涤的羊毛衣物",
+          "limitations": "不适用于未知成分衣物；洗涤温度和方式以具体产品标签为准。"
+        },
+        {
+          "id": "wool-storage-prep",
+          "title": "羊毛衣物存放前整理",
+          "content": "Woolmark 建议羊毛衣物洗涤或收纳前清空口袋、取下腰带及饰品，并扣好纽扣或拉好拉链，以减少局部受力和变形。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "storage",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Caring for Wool",
+          "review_note": "对照所标注的来源段落核对中文概述和适用限制；色彩理论仅作为可选思路。",
+          "reviewed_at": "2026-10-30",
+          "reviewer": "codex-source-comparison",
+          "applicability": "羊毛衣物的洗前或收纳准备",
+          "limitations": "具体收纳方法还要参考款式、清洁状态及产品标签。"
+        },
+        {
+          "id": "wool-woven-brush",
+          "title": "梭织羊毛表面灰尘的处理",
+          "content": "Woolmark 建议仅对梭织羊毛衣物使用柔软衣刷，穿后沿织物长度方向轻刷表面灰尘；针织衣物不能直接套用这条建议。",
+          "source_url": "https://www.woolmark.com/care/care-for-wool/",
+          "source_name": "Woolmark",
+          "topic": "care",
+          "retrieved_at": "2026-08-13",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Brushing",
+          "review_note": "对照所标注的来源段落核对中文概述和适用限制；色彩理论仅作为可选思路。",
+          "reviewed_at": "2026-10-30",
+          "reviewer": "codex-source-comparison",
+          "applicability": "梭织羊毛衣物的表面除尘",
+          "limitations": "不适用于未知织法、易损装饰或不允许刷拭的衣物；遵循产品说明。"
+        }
+      ],
+      "rubric": "提供限定为羊毛且遵循整件洗标的材料背景，不承诺具体处理许可。",
+      "traces": [
+        {
+          "name": "get_garment",
+          "status": "success",
+          "summary": "{\"found\": true, \"garment\": {\"category\": \"上装\", \"confidence\": {}, \"created_at\": \"2024-01-01T00:00:00\", \"id\": \"quality-item\", \"material\": \"羊毛\", \"name\": \"试用上衣\", ...",
+          "duration_ms": 0
+        },
+        {
+          "name": "care_guide",
+          "status": "success",
+          "summary": "{\"answer_status\": \"evidence_found\", \"attempts\": 1, \"care_boundary\": true, \"effective_query\": \"这件怎么洗护 用户记录的衣物材质：羊毛\", \"evidence_ids\": [\"fabric-wool-label\", \"wo...",
+          "duration_ms": 16
+        }
+      ],
+      "duration_ms": 4.0,
+      "model_invocations": 0,
+      "rule_checks": {
+        "nonempty": true,
+        "required_text": true,
+        "forbidden_text_absent": true,
+        "forbidden_pattern_absent": true,
+        "citation_presence": true,
+        "citation_identity": true
+      },
+      "rule_pass": true,
+      "model_review": null
+    },
+    {
+      "id": "aq19",
+      "group": "turn-correction",
+      "question": "上次说错了，这件其实是醋酸，洗标还没找到，如何清洗",
+      "answer": "当前没有足够适用的洗护资料；请提供这件衣物的成分、洗标或厂家护理说明。",
+      "sources": [],
+      "references": [],
+      "cited_source_records": [],
+      "rubric": "当前轮修正优先，不延续旧羊毛护理。",
+      "traces": [
+        {
+          "name": "care_guide",
+          "status": "success",
+          "summary": "{\"answer_status\": \"not_found\", \"attempts\": 2, \"care_boundary\": true, \"effective_query\": \"上次说错了，这件其实是醋酸，洗标还没找到，如何清洗 相关资料\", \"evidence_ids\": [], \"information_pr...",
+          "duration_ms": 0
+        }
+      ],
+      "duration_ms": 4.428,
+      "model_invocations": 0,
+      "rule_checks": {
+        "nonempty": true,
+        "required_text": true,
+        "forbidden_text_absent": true,
+        "forbidden_pattern_absent": true,
+        "citation_presence": true,
+        "citation_identity": true
+      },
+      "rule_pass": true,
+      "model_review": null
+    },
+    {
+      "id": "aq20",
+      "group": "tax-scope",
+      "question": "知识库能帮忙算个人税务申报需要准备什么材料吗",
+      "answer": "当前知识库聚焦衣物与出行准备，没有适用于这个问题的证据。",
+      "sources": [],
+      "references": [],
+      "cited_source_records": [],
+      "rubric": "不将出行衣物资料当税务证据。",
+      "traces": [
+        {
+          "name": "rag_search",
+          "status": "success",
+          "summary": "{\"answer_status\": \"not_found\", \"attempts\": 2, \"care_boundary\": false, \"effective_query\": \"知识库能帮忙算个人税务申报需要准备什么材料\", \"evidence_ids\": [], \"information_provenance...",
+          "duration_ms": 0
+        }
+      ],
+      "duration_ms": 1.104,
+      "model_invocations": 0,
+      "rule_checks": {
+        "nonempty": true,
+        "required_text": true,
+        "forbidden_text_absent": true,
+        "forbidden_pattern_absent": true,
+        "citation_presence": true,
+        "citation_identity": true
+      },
+      "rule_pass": true,
+      "model_review": null
+    },
+    {
+      "id": "aq21",
+      "group": "document-size-absence",
+      "question": "根据本会话的晨岚A73资料，该款L码袖长具体多少厘米",
+      "answer": "当前资料没有这款产品的具体尺寸数据。请提供准确品牌、款号及对应尺码表或测量数据；通用量衣指南不能代替该款数据。",
+      "sources": [],
+      "references": [],
+      "cited_source_records": [],
+      "rubric": "文档属于会话不等于包含答案，仍要缺失判断。",
+      "traces": [
+        {
+          "name": "rag_search",
+          "status": "success",
+          "summary": "{\"answer_status\": \"needs_clarification\", \"attempts\": 1, \"care_boundary\": false, \"effective_query\": \"根据本会话的晨岚A73资料，该款L码袖长具体多少厘米\", \"evidence_ids\": [], \"informa...",
+          "duration_ms": 0
+        }
+      ],
+      "duration_ms": 5.716,
+      "model_invocations": 0,
+      "rule_checks": {
+        "nonempty": true,
+        "required_text": true,
+        "forbidden_text_absent": true,
+        "forbidden_pattern_absent": true,
+        "citation_presence": true,
+        "citation_identity": true
+      },
+      "rule_pass": true,
+      "model_review": null
+    },
+    {
+      "id": "aq22",
+      "group": "document-label",
+      "question": "根据上传的青岚夹克洗标说明，它可以烘干吗",
+      "answer": "根据你上传的资料：\n青岚夹克产品洗标说明：本件仅允许手洗，不可烘干。\n来源：user-document://quality-aq22",
+      "sources": [
+        {
+          "id": "aq22.txt",
+          "title": "aq22.txt",
+          "url": "user-document://quality-aq22"
+        }
+      ],
+      "references": [],
+      "cited_source_records": [],
+      "rubric": "保留当前用户提供的产品限制，不混入厂家已核验的身份声明。",
+      "traces": [
+        {
+          "name": "care_guide",
+          "status": "success",
+          "summary": "{\"answer_status\": \"evidence_found\", \"attempts\": 1, \"care_boundary\": true, \"effective_query\": \"根据上传的青岚夹克洗标说明，它可以烘干吗\", \"evidence_ids\": [\"8bb8b91b68570451726b61...",
+          "duration_ms": 0
+        }
+      ],
+      "duration_ms": 4.623,
+      "model_invocations": 0,
+      "rule_checks": {
+        "nonempty": true,
+        "required_text": true,
+        "forbidden_text_absent": true,
+        "forbidden_pattern_absent": true,
+        "citation_presence": true,
+        "citation_identity": true
+      },
+      "rule_pass": true,
+      "model_review": null
+    },
+    {
+      "id": "aq23",
+      "group": "chemical-gap",
+      "question": "羊毛针织品洗护时咖啡渍应使用哪一种去污化学剂配方",
+      "answer": "当前资料不足以支持你要求的具体去污剂、溶剂或配方。一般材质护理不等于该污渍处理许可，请提供整件洗标及厂家针对性说明。",
+      "sources": [],
+      "references": [],
+      "cited_source_records": [],
+      "rubric": "一般羊毛护理不能支持具体化学剂配方或浓度。",
+      "traces": [
+        {
+          "name": "care_guide",
+          "status": "success",
+          "summary": "{\"answer_status\": \"needs_clarification\", \"attempts\": 1, \"care_boundary\": true, \"effective_query\": \"羊毛针织品洗护时咖啡渍应使用哪一种去污化学剂配方\", \"evidence_ids\": [], \"informatio...",
+          "duration_ms": 0
+        }
+      ],
+      "duration_ms": 4.025,
+      "model_invocations": 0,
+      "rule_checks": {
+        "nonempty": true,
+        "required_text": true,
+        "forbidden_text_absent": true,
+        "forbidden_pattern_absent": true,
+        "citation_presence": true,
+        "citation_identity": true
+      },
+      "rule_pass": true,
+      "model_review": null
+    },
+    {
+      "id": "aq24",
+      "group": "technical-exclusion",
+      "question": "SHAKEDRY衣物洗护后能照普通GORE-TEX那样烘干再喷DWR吗",
+      "answer": "SHAKEDRY 等持久泼水表面产品禁止烘干、熨烫及施加 DWR，不能套用常规步骤。\n适用范围：仅引用来源中关于 SHAKEDRY 的排除条款；不授予普通外套处理许可。\n限制：只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。\n来源：https://www.gore-tex.com/support/care/outerwear\n持久泼水表面产品如 SHAKEDRY 没有纺织外层且无需 DWR，需执行特殊护理，不能以统一补涂方式处理。\n适用范围：仅引用来源中关于 SHAKEDRY 的排除条款；不授予普通外套处理许可。\n限制：只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。\n来源：https://www.gore-tex.com/support/care/outerwear",
+      "sources": [
+        {
+          "id": "GORE-TEX Brand",
+          "title": "按产品说明恢复拒水",
+          "url": "https://www.gore-tex.com/support/care/outerwear"
+        }
+      ],
+      "references": [
+        {
+          "id": "care-shell-reactivate-dwr",
+          "title": "按产品说明恢复拒水",
+          "content": "部分普通 GORE-TEX 外套可按制造商洗标和官方护理步骤，通过温和烘干或隔布低温熨烫恢复拒水表现。SHAKEDRY 等持久泼水表面产品禁止烘干、熨烫及施加 DWR，不能套用常规步骤。",
+          "source_url": "https://www.gore-tex.com/support/care/outerwear",
+          "source_name": "GORE-TEX Brand",
+          "topic": "care",
+          "retrieved_at": "2026-08-17",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "DRY / Step 2; Special Care",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "仅允许相应受热护理的普通 GORE-TEX 外套；排除 SHAKEDRY。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        },
+        {
+          "id": "fabric-shell-dwr-beading",
+          "title": "泼水表现先做水珠检查",
+          "content": "GORE-TEX 外套清洗后，若水仍不能聚成水珠并滚落，一般护理说明建议重新施加耐久拒水处理。但持久泼水表面产品如 SHAKEDRY 不适用，不能施加 DWR。",
+          "source_url": "https://www.gore-tex.com/support/care/outerwear",
+          "source_name": "GORE-TEX Brand",
+          "topic": "fabric",
+          "retrieved_at": "2026-08-17",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Re-apply the DWR / Step 1; Special Care",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "普通 GORE-TEX 外套；SHAKEDRY 等持久泼水表面产品除外。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        },
+        {
+          "id": "wardrobe-maintain-shell-first",
+          "title": "功能外套先维护再替换",
+          "content": "GORE-TEX 的一般护理步骤把清洗后的水珠表现作为判断是否补充 DWR 的依据。持久泼水表面产品如 SHAKEDRY 没有纺织外层且无需 DWR，需执行特殊护理，不能以统一补涂方式处理。",
+          "source_url": "https://www.gore-tex.com/support/care/outerwear",
+          "source_name": "GORE-TEX Brand",
+          "topic": "wardrobe",
+          "retrieved_at": "2026-08-17",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Re-apply the DWR; Special Care",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "仅用于区分普通 GORE-TEX 与持久泼水表面产品的护理要求。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        }
+      ],
+      "cited_source_records": [
+        {
+          "id": "care-shell-close-zips",
+          "title": "功能外套洗前闭合拉链",
+          "content": "GORE-TEX 外套的一般洗护说明要求清洗前闭合前襟、口袋及腋下拉链，并固定松动的搭片和带子。操作还需遵循成衣制造商的洗标，不能直接推广到所有功能面料外套。",
+          "source_url": "https://www.gore-tex.com/support/care/outerwear",
+          "source_name": "GORE-TEX Brand",
+          "topic": "care",
+          "retrieved_at": "2026-08-17",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "GORE-TEX Outerwear / Wash / Step 1",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "GORE-TEX 外套的一般护理；先核对制造商说明。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        },
+        {
+          "id": "care-shell-liquid-detergent",
+          "title": "功能外套慎选洗涤剂",
+          "content": "GORE-TEX 外套一般洗护说明建议使用少量液体洗涤剂，不使用粉状洗涤剂、柔顺剂、去渍剂或漂白剂。具体成衣的制造商洗标仍需先核对，不能把该说明推广到所有材质。",
+          "source_url": "https://www.gore-tex.com/support/care/outerwear",
+          "source_name": "GORE-TEX Brand",
+          "topic": "care",
+          "retrieved_at": "2026-08-17",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "GORE-TEX Outerwear / Wash / Step 2",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "GORE-TEX 外套的一般洗涤，受具体洗标限制。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        },
+        {
+          "id": "fabric-shell-dwr-beading",
+          "title": "泼水表现先做水珠检查",
+          "content": "GORE-TEX 外套清洗后，若水仍不能聚成水珠并滚落，一般护理说明建议重新施加耐久拒水处理。但持久泼水表面产品如 SHAKEDRY 不适用，不能施加 DWR。",
+          "source_url": "https://www.gore-tex.com/support/care/outerwear",
+          "source_name": "GORE-TEX Brand",
+          "topic": "fabric",
+          "retrieved_at": "2026-08-17",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Re-apply the DWR / Step 1; Special Care",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "普通 GORE-TEX 外套；SHAKEDRY 等持久泼水表面产品除外。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        },
+        {
+          "id": "care-shell-reactivate-dwr",
+          "title": "按产品说明恢复拒水",
+          "content": "部分普通 GORE-TEX 外套可按制造商洗标和官方护理步骤，通过温和烘干或隔布低温熨烫恢复拒水表现。SHAKEDRY 等持久泼水表面产品禁止烘干、熨烫及施加 DWR，不能套用常规步骤。",
+          "source_url": "https://www.gore-tex.com/support/care/outerwear",
+          "source_name": "GORE-TEX Brand",
+          "topic": "care",
+          "retrieved_at": "2026-08-17",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "DRY / Step 2; Special Care",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "仅允许相应受热护理的普通 GORE-TEX 外套；排除 SHAKEDRY。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        },
+        {
+          "id": "wardrobe-maintain-shell-first",
+          "title": "功能外套先维护再替换",
+          "content": "GORE-TEX 的一般护理步骤把清洗后的水珠表现作为判断是否补充 DWR 的依据。持久泼水表面产品如 SHAKEDRY 没有纺织外层且无需 DWR，需执行特殊护理，不能以统一补涂方式处理。",
+          "source_url": "https://www.gore-tex.com/support/care/outerwear",
+          "source_name": "GORE-TEX Brand",
+          "topic": "wardrobe",
+          "retrieved_at": "2026-08-17",
+          "content_kind": "source_summary",
+          "review_status": "reviewed",
+          "source_locator": "Re-apply the DWR; Special Care",
+          "review_note": "2026-10-22 使用官方网页指定章节逐项对照后收窄/改写中文摘要；由 Codex 审查，非人工专家认证。",
+          "reviewed_at": "2026-10-22",
+          "reviewer": "codex-source-comparison",
+          "applicability": "仅用于区分普通 GORE-TEX 与持久泼水表面产品的护理要求。",
+          "limitations": "只支持摘要中列出的适用范围；具体产品说明与洗标优先，不能泛化到所有衣物。"
+        }
+      ],
+      "rubric": "必须保留 SHAKEDRY 的明确排除，不能把一般功能外套操作混入答案。",
+      "traces": [
+        {
+          "name": "care_guide",
+          "status": "success",
+          "summary": "{\"answer_status\": \"evidence_found\", \"attempts\": 1, \"care_boundary\": true, \"effective_query\": \"SHAKEDRY衣物洗护后能照普通GORE-TEX那样烘干再喷DWR吗\", \"evidence_ids\": [\"care-sh...",
+          "duration_ms": 0
+        }
+      ],
+      "duration_ms": 3.946,
+      "model_invocations": 0,
+      "rule_checks": {
+        "nonempty": true,
+        "required_text": true,
+        "forbidden_text_absent": true,
+        "forbidden_pattern_absent": true,
+        "citation_presence": true,
+        "citation_identity": true
+      },
+      "rule_pass": true,
+      "model_review": null
+    }
+  ],
+  "summary": {
+    "completed_cases": 24,
+    "rule_rubric_pass": {
+      "passed": 24,
+      "total": 24,
+      "rate": 1.0,
+      "wilson_95": [
+        0.862,
+        1.0
+      ]
+    },
+    "latency": {
+      "n": 24,
+      "mean_ms": 4.651,
+      "p50_ms": 4.383,
+      "p95_ms": 5.716,
+      "p99_ms": 14.314
+    },
+    "reviewed_by_model": 0,
+    "human_review": "pending_not_scored",
+    "model_assisted_correctness": {
+      "passed": 0,
+      "total": 0,
+      "rate": null,
+      "wilson_95": null
+    },
+    "model_assisted_faithfulness": {
+      "passed": 0,
+      "total": 0,
+      "rate": null,
+      "wilson_95": null
+    },
+    "model_assisted_citation_support": {
+      "passed": 0,
+      "total": 0,
+      "rate": null,
+      "wilson_95": null
+    },
+    "model_assisted_clarification_quality": {
+      "passed": 0,
+      "total": 0,
+      "rate": null,
+      "wilson_95": null
+    }
+  },
+  "answer_model_calls": 0,
+  "review_model_calls": 0,
+  "provider_reported_tokens": {
+    "answer": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    },
+    "review": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    }
+  },
+  "source_unchanged": true
+}

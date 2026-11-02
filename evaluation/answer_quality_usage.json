@@ -1,0 +1,16 @@
+{
+  "version": "2026-11-02-prospective-v1",
+  "current_split": "development_regression_after_first_analysis",
+  "first_scored_report": "artifacts/reports/rag/answer-quality-20261102.json",
+  "first_report_sha256": "e9f5359086cab64525e24e6421e2bcd0cd7347eac746a84a4be8d140c3dcf1d7",
+  "first_rule_pass": {
+    "passed": 16,
+    "total": 24,
+    "rate": 0.6667,
+    "wilson_95": [
+      0.4671,
+      0.8203
+    ]
+  },
+  "reason": "First outputs exposed operation-loss and selection/routing gaps. These outputs were analyzed and fixes followed; subsequent replays are regression, not held-out. Independent human review remains pending."
+}

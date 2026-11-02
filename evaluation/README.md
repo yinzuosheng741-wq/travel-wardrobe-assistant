@@ -8,6 +8,7 @@
 | `benchmark.py` | `benchmark_cases.json`、`benchmark_validation_cases.json` | 任务、检索与可选真实 API 测量 |
 | `rag_audit.py` | `rag_audit_cases.json` | 证据切块、摘录、上下文及知识覆盖诊断 |
 | `rag_critical.py` | `rag_critical_cases.json` | 23 个关键契约、生产 @4/@5 对照及 8 个待审读挑战 |
+| `answer_quality.py` | `answer_quality_cases.json`、`answer_quality_manifest.json` | 冻结的 24 个前瞻问句、完整聊天输出、分开的文本断言/模型辅助审读与待人工复核包 |
 
 例：`python -m evaluation.rag_critical --output artifacts/local/rag-critical-next.json`。新增输出使用新文件名，避免覆盖历史证据；该诊断默认离线，失败项写入报告，`--require-pass` 才要求契约全过。
 

@@ -7,7 +7,7 @@
 | `guides/` | 使用、配置、备份与分发 | [客户端指南](guides/DESKTOP.md) |
 | `architecture/` | 当前架构与执行契约 | [框架维护](architecture/FRAMEWORK_MAINTENANCE_20261029.md)、[Agent 执行契约](architecture/AGENT_REFACTOR_20261031.md) |
 | `development/` | 开发、目录与知识/题集规范 | [仓库维护](development/REPOSITORY.md)、[题集政策](development/DATASET_POLICY.md)、[知识契约](development/KNOWLEDGE_CONTRACT.md) |
-| `reports/` | 按日期保留的检查与测评报告 | [RAG 关键点复核](reports/RAG_CRITICAL_REVIEW_20261031.md)、[RAG 审计](reports/RAG_AUDIT_20261031.md)、[功能测试](reports/FUNCTIONAL_TEST_20261030.md) |
+| `reports/` | 按日期保留的检查与测评报告 | [洗护证据与回答评测](reports/CARE_EVIDENCE_20261102.md)、[RAG 关键点复核](reports/RAG_CRITICAL_REVIEW_20261031.md)、[RAG 审计](reports/RAG_AUDIT_20261031.md) |
 | `plans/` | 尚待实施的优化设计 | [RAG 优化计划](plans/RAG_OPTIMIZATION_PLAN.md) |
 | `resume/` | 项目表述参考 | [简历条目](resume/stylemate-resume-entry.md) |
 | `assets/` | 文档引用的当前截图 | 页面截图与配置截图 |

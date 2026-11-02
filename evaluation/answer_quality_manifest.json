@@ -1,0 +1,9 @@
+{
+  "version":"2026-11-02-prospective-v1",
+  "dataset":"answer_quality_cases.json",
+  "sha256":"869d25344e67bd7cc28c6ce600d06260ebbf844b521441872f69d83b941941e1",
+  "fingerprint_schema":"utf8-normalized-newlines-v1",
+  "cases":24,
+  "frozen_before_implementation":true,
+  "independence":"Separate from development regression; project-authored, not external human-blind evaluation. First scored outcomes must not be used to tune this implementation."
+}
