@@ -2,6 +2,8 @@ name: Build Windows Desktop
 
 on:
   workflow_dispatch:
+  push:
+    tags: ['v*']
 
 permissions:
   contents: read
@@ -29,9 +31,63 @@ jobs:
       - run: .venv/Scripts/python.exe -m pip check
       - run: .venv/Scripts/python.exe desktop.py --check
       - run: .venv/Scripts/python.exe scripts/build_desktop.py
+      - name: Verify portable startup and write checksum
+        shell: pwsh
+        run: |
+          $archive = Resolve-Path 'dist/TravelWardrobeAssistant-Windows-Portable.zip'
+          $smokeRoot = Join-Path $env:RUNNER_TEMP 'wardrobe-release-smoke'
+          Expand-Archive -LiteralPath $archive -DestinationPath $smokeRoot
+          $executable = Get-ChildItem -LiteralPath $smokeRoot -Recurse -Filter '*.exe' |
+            Where-Object { $_.Name -eq '出行衣橱助手.exe' } | Select-Object -ExpandProperty FullName
+          if (@($executable).Count -ne 1) { throw 'Expected one application executable.' }
+          $smoke = Start-Process -FilePath $executable -ArgumentList '--no-ui' -WindowStyle Hidden -PassThru
+          if (-not $smoke.WaitForExit(120000)) {
+            $smoke.Kill()
+            throw 'Portable startup timed out.'
+          }
+          if ($smoke.ExitCode -ne 0) { throw "Portable startup failed: $($smoke.ExitCode)" }
+          $digest = (Get-FileHash -LiteralPath $archive -Algorithm SHA256).Hash.ToLowerInvariant()
+          "$digest  $([IO.Path]::GetFileName($archive))" |
+            Set-Content -LiteralPath "$archive.sha256" -Encoding utf8NoBOM
       - uses: actions/upload-artifact@v4
         with:
           name: TravelWardrobeAssistant-Windows
-          path: dist/TravelWardrobeAssistant-Windows-Portable.zip
+          path: |
+            dist/TravelWardrobeAssistant-Windows-Portable.zip
+            dist/TravelWardrobeAssistant-Windows-Portable.zip.sha256
           if-no-files-found: error
           retention-days: 14
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: package
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: TravelWardrobeAssistant-Windows
+          path: release-assets
+      - name: Verify checksum
+        working-directory: release-assets
+        run: sha256sum --check TravelWardrobeAssistant-Windows-Portable.zip.sha256
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        shell: bash
+        run: |
+          cat > release-notes.md <<'NOTES'
+          面向 Windows x64 的便携桌面客户端，包含 Python、Qt 和运行依赖。
+
+          - 下载 `TravelWardrobeAssistant-Windows-Portable.zip`，解压后运行 `出行衣橱助手.exe`，请保留完整目录。
+          - 支持衣橱管理、库存搭配、旅行准备、洗护与资料问答，以及本地跨会话记忆。
+          - 首次启动可配置对话、视觉、Embedding 和天气服务；也可先使用离线衣橱。
+          - 升级前退出旧客户端并备份 `data/`；模型及天气密钥需自行配置。
+          - `.zip.sha256` 用于核对下载文件完整性。源码压缩包不包含客户端运行环境。
+          NOTES
+          gh release create "$RELEASE_TAG" release-assets/* \
+            --verify-tag --draft --title "出行衣橱助手 $RELEASE_TAG" --notes-file release-notes.md
+          gh release edit "$RELEASE_TAG" --draft=false --latest

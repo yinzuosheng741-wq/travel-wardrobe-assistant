@@ -16,9 +16,11 @@
 
 ## Windows 客户端
 
-从仓库 [Actions](https://github.com/yinzuosheng741-wq/travel-wardrobe-assistant/actions/workflows/desktop-release.yml) 的成功构建中下载 `TravelWardrobeAssistant-Windows`，解压其中的 `TravelWardrobeAssistant-Windows-Portable.zip`，再运行 **出行衣橱助手.exe**。下载 Actions 产物通常需要登录 GitHub。
+从 [最新 Release](https://github.com/yinzuosheng741-wq/travel-wardrobe-assistant/releases/latest) 下载 `TravelWardrobeAssistant-Windows-Portable.zip`，解压后运行 **出行衣橱助手.exe**。无需安装 Python，公开下载无需登录 GitHub；Release 附件不受 Actions 临时产物保留期限制。
 
 请保留完整目录，不要只复制 exe；程序需要放在可写位置。便携包包含 Python、Qt 和运行依赖。首次启动会初始化演示衣物，已有衣橱不会被覆盖。
+
+每个版本同时提供 `.zip.sha256` 校验文件，可用 PowerShell 的 `Get-FileHash -Algorithm SHA256` 核对下载包。历史版本见 [Releases](https://github.com/yinzuosheng741-wq/travel-wardrobe-assistant/releases)。
 
 ## 从源码运行
 
