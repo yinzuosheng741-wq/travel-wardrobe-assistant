@@ -44,6 +44,13 @@ def create_backup(database: Path, uploads: Path, destination: Path) -> dict:
         archive_path = staging / "backup.zip"
         with zipfile.ZipFile(archive_path, "w", zipfile.ZIP_DEFLATED) as archive:
             files = [(snapshot, "data/stylemate.db")]
+            memory = database.parent / "memory/sync.sqlite3"
+            if memory.is_file():
+                memory_snapshot = staging / "memory.sqlite3"
+                with closing(sqlite3.connect(memory.as_uri() + "?mode=ro", uri=True)) as source:
+                    with closing(sqlite3.connect(memory_snapshot)) as target:
+                        source.backup(target)
+                files.append((memory_snapshot, "data/memory/sync.sqlite3"))
             files.extend((image, "data/uploads/" + image.relative_to(uploads).as_posix()) for image in sorted(images))
             for source_path, archive_name in files:
                 payload = source_path.read_bytes()

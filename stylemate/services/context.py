@@ -130,6 +130,8 @@ def build_context(
         settings.embedding_model_name,
         _credential_fingerprint(os.getenv("EMBEDDING_API_KEY") or os.getenv("DASHSCOPE_API_KEY", "")),
         settings.rag_timeout_seconds,
+        os.getenv("STYLEMATE_VECTOR_BACKEND", "sqlite"),
+        os.getenv("LOCAL_EMBEDDING_PATH", ""),
     )
     if state.get("stylemate_retriever_signature") != retriever_signature:
         embedding = _build_embedding(settings)
@@ -158,6 +160,11 @@ def build_context(
         model=model,
         weather_client=weather_client,
     )
+    if settings.app_mode == "local" and settings.memory_provider == "local":
+        from stylemate.memory.local import LocalMemory
+        if "stylemate_local_memory" not in state:
+            state["stylemate_local_memory"] = LocalMemory(project_root / "data/memory/sync.sqlite3")
+        agent_service.long_term_memory = state["stylemate_local_memory"]
     return AppContext(
         settings=settings,
         owner_id=owner_id,
@@ -182,6 +189,9 @@ def _build_vision_gateway(settings: RuntimeSettings) -> VisionGateway:
 
 
 def _build_embedding(settings: RuntimeSettings):
+    if os.getenv("LOCAL_EMBEDDING_PATH"):
+        from stylemate.rag.local_embedding import LocalBGEEmbedding
+        return LocalBGEEmbedding(os.environ["LOCAL_EMBEDDING_PATH"])
     api_key = os.getenv("EMBEDDING_API_KEY") or os.getenv(
         "DASHSCOPE_API_KEY", ""
     )

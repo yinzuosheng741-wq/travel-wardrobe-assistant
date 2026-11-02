@@ -26,10 +26,10 @@ def selected_files(root: Path):
     def eligible(path):
         return visible_files is None or path.relative_to(root).as_posix() in visible_files
 
-    common = {"desktop.py", "Start.cmd", "Start.vbs", "README.md", "LICENSE", "THIRD_PARTY_NOTICES.md", "CONTRIBUTING.md", "SECURITY.md", ".env.example", "requirements.txt",
+    common = {"desktop.py", "Start.cmd", "Start.vbs", "README.md", "LICENSE", "THIRD_PARTY_NOTICES.md", "SECURITY.md", ".env.example", "requirements.txt",
               "requirements-desktop.txt", "requirements-common.txt",
-              "requirements-portable.txt", "portable-lock.txt", "pyproject.toml"}
-    directories = ["stylemate", "assets/demo", "data/knowledge", "docs", "evaluation", "licenses"]
+              "requirements-portable.txt", "requirements-local-embedding.txt", "portable-lock.txt"}
+    directories = ["stylemate", "assets/demo", "licenses"]
     for name in sorted(common):
         if (root / name).is_file() and eligible(root / name):
             yield root / name
@@ -38,6 +38,8 @@ def selected_files(root: Path):
             if not path.is_file() or path.is_symlink() or not eligible(path):
                 continue
             parts = path.relative_to(root).parts
+            if parts[:2] == ("stylemate", "evaluation"):
+                continue
             if any(part.startswith(".") for part in parts):
                 continue
             if "__pycache__" in parts or path.suffix in {".pyc", ".db", ".sqlite3", ".log"}:
@@ -45,17 +47,12 @@ def selected_files(root: Path):
             if path.name.startswith(".env") or path.name == "secrets.toml":
                 continue
             yield path
-    reports = {"evaluation.json", "agent_evaluation.json", "agent_evaluation_20261022_round2.json"}
-    manifest_path = root / "artifacts/evaluation_manifest.json"
-    if manifest_path.is_file():
-        try:
-            active = json.loads(manifest_path.read_text("utf-8"))["report"]
-            if isinstance(active, str) and Path(active).name == active and active.endswith(".json"):
-                reports.update({"evaluation_manifest.json", active})
-        except (OSError, ValueError, KeyError, TypeError):
-            pass
-    for name in sorted(reports):
-        path = root / "artifacts" / name
+    public_files = ["data/knowledge/records.jsonl", "data/knowledge/sources.json",
+                    "docs/guides/DESKTOP.md", "docs/guides/SETUP.md"]
+    public_files.extend("docs/assets/" + name for name in ("wardrobe.png", "chat.png", "service-setup.png", "weather-setup.png"))
+    public_files.extend("scripts/" + name for name in ("build_desktop.py", "build_portable.py", "package_notices.py", "lock_runtime.py"))
+    for name in public_files:
+        path = root / name
         if path.is_file() and eligible(path):
             yield path
 

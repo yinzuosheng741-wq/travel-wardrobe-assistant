@@ -1,0 +1,9 @@
+version: 1
+skills:
+  knowledge_search: [rag_search]
+  care_assessment: [care_guide]
+  garment_management: [get_garment, search_wardrobe, item_style_analysis, add_garment, update_garment, delete_garment]
+  outfit_recommendation: [recommend_inventory_outfit, recommend_open_outfit, wardrobe_gap_check, recommend_purchases]
+  size_reference: [recommend_size]
+  travel_planning: [get_user_location, get_weather, travel_packing]
+  deep_research: [deep_research]

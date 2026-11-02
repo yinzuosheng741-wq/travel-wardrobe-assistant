@@ -16,7 +16,7 @@ def copy_user_guides(output: Path):
     """Preserve guide/screenshot relative paths in the extracted application."""
     docs = output / "docs"
     (docs / "guides").mkdir(parents=True, exist_ok=True)
-    for name in ("DESKTOP.md", "PORTABLE_20261030.md"):
+    for name in ("DESKTOP.md", "SETUP.md"):
         shutil.copyfile(ROOT / "docs/guides" / name, docs / "guides" / name)
     (docs / "assets").mkdir(exist_ok=True)
     for name in ("service-setup.png", "weather-setup.png"):
@@ -31,14 +31,22 @@ def main():
                "--contents-directory", ".", "--name", APP_NAME, "--paths", str(ROOT),
                "--distpath", str(ROOT / "dist/native"), "--workpath", str(ROOT / "dist/native-build"),
                "--specpath", str(ROOT / "dist/native-build")]
-    for name in ("assets/demo", "data/knowledge", "stylemate/prompts"):
+    for name in ("assets/demo", "stylemate/prompts"):
         command.extend(["--add-data", f"{ROOT / name};{name}"])
+    for name in ("records.jsonl", "sources.json"):
+        command.extend(["--add-data", f"{ROOT / 'data/knowledge' / name};data/knowledge"])
+    for folder in ("stylemate/skillpacks", "stylemate/constraints"):
+        for path in sorted((ROOT / folder).rglob("*")):
+            if path.suffix in {".yaml", ".md"}:
+                destination = path.parent.relative_to(ROOT).as_posix()
+                command.extend(["--add-data", f"{path};{destination}"])
     command.extend(["--add-data", f"{ROOT / '.env.example'};."])
     for name in ("langchain", "langchain-core", "langchain-openai", "langgraph", "langgraph-checkpoint",
                  "langgraph-prebuilt", "langgraph-sdk", "dashscope"):
         command.extend(["--copy-metadata", name])
     command.extend(["--collect-submodules", "langgraph", "--hidden-import", "tiktoken_ext.openai_public"])
-    for name in ("streamlit", "chromadb", "matplotlib", "scipy", "pandas", "pyarrow", "torch", "tensorflow",
+    command.extend(["--collect-all", "milvus_lite", "--collect-all", "faiss", "--collect-all", "pyarrow"])
+    for name in ("streamlit", "chromadb", "matplotlib", "scipy", "pandas", "torch", "tensorflow",
                  "PyQt5", "PyQt6", "PySide6.QtWebEngineCore", "PySide6.QtWebEngineWidgets"):
         command.extend(["--exclude-module", name])
     command.append(str(ROOT / "desktop.py"))

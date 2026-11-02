@@ -14,6 +14,9 @@ def check_service(kind, values, session=None):
     session = session or requests.Session()
     started = time.monotonic()
     try:
+        if kind == "memory":
+            enabled = values.get("MEMORY_PROVIDER", "local") == "local"
+            return {"ok": enabled, "message": "本地长期记忆已启用，无需网络连接。" if enabled else "长期记忆已关闭。"}
         if kind == "weather":
             settings = RuntimeSettings(app_mode="local", vision_model_name="", text_model_name="",
                                        weather_provider=values["WEATHER_PROVIDER"], weather_city=values["WEATHER_CITY"],

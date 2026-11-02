@@ -1,8 +1,8 @@
 # 出行衣橱助手 客户端指南
 
-2026-10-30 更新：新增配置向导、模型连接测试、天气服务选择和完整便携状态。方案和实测见 [便携版说明](PORTABLE_20261030.md)。
+使用前可先阅读[服务配置](SETUP.md)。
 
-项目仅维护 PySide6 / Qt Widgets 原生客户端，运行不依赖浏览器、HTTP 服务或 WebView。旧 `app.py`、网页启动器、Streamlit 配置和网页组件已移除。
+客户端使用 PySide6 / Qt Widgets 原生界面，运行不依赖浏览器或 WebView。
 
 ## 启动与升级
 
@@ -40,26 +40,15 @@
 
 在“设置 → 数据与关于 → 创建完整备份”生成 ZIP，包含 SQLite 在线快照、关联衣物照片、偏好、会话和资料，以及 SHA-256 文件清单。缺少关联图片时中止，不覆盖先前备份。密钥、日志、向量缓存与 Qt 界面状态不进入备份。
 
-恢复时退出客户端，另存当前 `data/` 后，将备份中的 `data/stylemate.db` 和 `data/uploads/` 放回应用目录。密钥使用 `data/config/services.env` 中自己保存的配置。JSON 衣橱清单不包含照片与会话，不能代替完整备份。
+本地长期记忆：在服务配置的“跨会话记忆”页启用或关闭，无需 Mem0 或其他云账号。已确认偏好、当前对话表达的条件与场景会按来源记录，并通过本地关键词检索用于后续对话；照片和原始资料不会进入记忆检索。存储与检索不调用网络；若对话使用远程模型，召回的少量记忆会作为本轮上下文发送给该模型。当前明确条件优先，记忆不能充当工具授权或洗护证据。“设置 → 服务状态 → 查看与管理长期记忆”支持删除和清空；完整备份同时包含存在的 `data/memory/sync.sqlite3`。
 
-## 验证与打包
+恢复时退出客户端，另存当前 `data/` 后，将备份中的 `data/stylemate.db`、`data/uploads/` 和存在的 `data/memory/` 放回应用目录。密钥使用 `data/config/services.env` 中自己保存的配置。JSON 衣橱清单不包含照片与会话，不能代替完整备份。
+
+## 自行打包
 
 ```powershell
-.venv\Scripts\python.exe desktop.py --check
-.venv\Scripts\python.exe scripts/validate.py
-.venv\Scripts\python.exe scripts/lock_runtime.py
 .venv\Scripts\python.exe -m pip install pyinstaller==6.11.1
 .venv\Scripts\python.exe scripts/build_desktop.py
 ```
 
-`--check` 检查原生依赖，不启动业务。`--no-ui` 验证服务和存储初始化，`--shutdown-after 2` 验证窗口启动退出；后两者会在所在应用目录创建或使用真实本地数据，分发测试应使用独立目录。
-
-打包脚本排除个人数据、密钥和网页运行时；如旧分发目录已有数据库，会拒绝覆盖。`scripts/build_portable.py` 可额外生成原生源码 ZIP，预备 runtime 必须包含 PySide6。`portable-lock.txt` 是 Windows / Python 3.12.4 验证环境快照，不是跨平台锁文件。
-
-本地仓库 origin 关联 [yinzuosheng741-wq/travel-wardrobe-assistant](https://github.com/yinzuosheng741-wq/travel-wardrobe-assistant)。代码推送后，可在 Actions 手动运行 `Build Windows Desktop` 并下载产物；工作流不会自动发布 Release。离线验证不替代真实模型、视觉、Embedding 和天气的联调。
-
-## 本次本地验证
-
-2026-10-29，Windows / Python 3.12.4：统一验证全部通过，389 项测试通过，Agent 语句覆盖率 92.10%；10 条规则用例与 101 条 Agent/RAG/图用例的离线质量门槛通过。网页专属测试随入口移除，纯业务测试保留，补充原生窗口布局、图片入库确认、详情操作、快捷草稿、设置和写操作预览回归。
-
-已检查常规和紧凑窗口截图。重新构建的独立 EXE 完成存储初始化（128 件演示衣物）及窗口启动退出验证，两项退出码均为 0。验证产物位于 `artifacts/client-only-validation/`，记录源码指纹；分发测试生成的临时衣橱在打包前清理，源码目录原有用户数据不受影响。本次未进行真实在线服务联调或推送 GitHub。
+输出目录为 `dist/native/出行衣橱助手/`，公开压缩包为 `dist/TravelWardrobeAssistant-Windows-Portable.zip`。请分享干净公开包，保留个人目录自用。源码 ZIP 不包含运行环境；完整便携 ZIP 包含 Python 和 Qt。

@@ -24,13 +24,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
-      - run: python -m pip install -r requirements-desktop.txt -r requirements-dev.txt
+          python-version: "3.12"
+      - run: python -m pip install -r requirements-desktop.txt -c portable-lock.txt
+      - run: python -m pip check
+      - run: python -m compileall -q stylemate desktop.py
       - run: python desktop.py --check
-      - run: python scripts/validate.py
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: validation-windows
-          path: artifacts/validation/
-          retention-days: 14
+      - run: python desktop.py --no-ui

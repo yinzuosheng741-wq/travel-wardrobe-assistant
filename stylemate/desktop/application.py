@@ -1069,10 +1069,11 @@ class MainWindow(QMainWindow):
         card, box = panel()
         box.addWidget(label("已连接的服务", "cardTitle"))
         box.addWidget(button("配置模型、天气与定位", self.configure_services, True), 0, Qt.AlignmentFlag.AlignLeft)
+        box.addWidget(button("查看与管理长期记忆", self.manage_local_memory), 0, Qt.AlignmentFlag.AlignLeft)
         diagnostics = runtime_diagnostics(self.context.settings, self.context.agent_service.retriever)
         self.service_status = {}
         for key, title in [("text_model_configured", "AI 对话"), ("vision_configured", "图片识别"),
-                           ("weather_configured", "实时天气"), ("embedding_configured", "语义检索")]:
+                           ("weather_configured", "实时天气"), ("embedding_configured", "语义检索"), ("memory_configured", "本地长期记忆")]:
             row = QHBoxLayout()
             row.addWidget(label(title), 1)
             status = label("已配置" if diagnostics[key] else "未配置", "subtitle")
@@ -1125,6 +1126,14 @@ class MainWindow(QMainWindow):
                 self.background(lambda: build_context(state, settings), completed, "正在应用服务配置…")
             except Exception:
                 self.error("配置未能完成应用，请检查文件权限并重新打开客户端。")
+
+    def manage_local_memory(self):
+        memory = self.context.agent_service.long_term_memory
+        if memory is None:
+            self.notify("请先在服务设置的跨会话记忆页启用本地长期记忆；演示模式不持久化记忆。")
+            return
+        from stylemate.desktop.memory_dialog import MemoryDialog
+        MemoryDialog(self, memory, self.context.owner_id).exec()
 
     def save_profile(self):
         self.context.profile_service.replace(self.context.owner_id,
@@ -1185,8 +1194,13 @@ def run(shutdown_after=0, no_ui=False):
     settings = replace(settings, app_mode="local")
     context = build_context({}, settings)
     if no_ui:
+        from stylemate.skillpacks.registry import SkillRegistry
+        catalog = SkillRegistry(context.agent_service._toolkit(context.owner_id, context.conversation_id).tools)
         report = {"application": "出行衣橱助手", "storage": "sqlite", "interface": "native-qt",
-                  "garments": len(context.repository.list_garments(context.owner_id))}
+                  "garments": len(context.repository.list_garments(context.owner_id)),
+                  "agent_engine": settings.agent_engine, "memory_provider": settings.memory_provider,
+                  "skill_packs": len(catalog.manifest.skills),
+                  "vector_backend": type(context.agent_service.retriever.chroma_client).__name__}
         report_path = ROOT / "data/desktop/native-check.json"
         report_path.parent.mkdir(parents=True, exist_ok=True)
         report_path.write_text(json.dumps(report), encoding="utf-8")

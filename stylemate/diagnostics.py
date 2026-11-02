@@ -22,6 +22,9 @@ def runtime_diagnostics(settings: Any, retriever: Any | None = None) -> dict[str
         "embedding_configured": embedding_key,
         "weather_configured": weather_key,
         "rag_mode": "hybrid" if embedding_key else "bm25-fallback",
+        "memory_configured": getattr(settings, "memory_provider", "local") == "local" and settings.app_mode == "local",
+        "agent_engine": getattr(settings, "agent_engine", "legacy"),
+        "vector_backend": os.getenv("STYLEMATE_VECTOR_BACKEND", "sqlite"),
     }
     if retriever is not None and hasattr(retriever, "stats"):
         result["retriever_stats"] = retriever.stats()

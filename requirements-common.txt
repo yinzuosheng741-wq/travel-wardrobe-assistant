@@ -10,3 +10,5 @@ langchain-core==1.5.4
 langchain-openai==1.4.3
 langgraph==1.2.9
 pypdf==6.15.0
+PyYAML==6.0.3
+milvus-lite==3.2.2

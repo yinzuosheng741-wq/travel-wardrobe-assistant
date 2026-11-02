@@ -165,6 +165,9 @@ def route_skills(text: str, available: set[str], *, travel_follow_up: bool = Fal
     if re.search(r"配色|色轮|互补色|邻近色|类似色", text) and not re.search(r"洗|护理|保养|烘|熨|漂白|柔顺剂", text):
         allowed.discard("care_guide")
     writes = explicit_write_tools(text)
+    if "深度研究" in text or "联网研究" in text:
+        allowed.add("deep_research")
+        skills = tuple(dict.fromkeys((*skills, "knowledge_qa")))
     if writes:
         allowed.update(SKILL_TOOLS["wardrobe_management"])
         allowed.update(writes)

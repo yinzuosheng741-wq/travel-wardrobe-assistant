@@ -7,7 +7,7 @@ shell.CurrentDirectory = base
 runtime = base & "\runtime\pythonw.exe"
 If Not fs.FileExists(runtime) Then runtime = base & "\.venv\Scripts\pythonw.exe"
 If Not fs.FileExists(runtime) Then
-    MsgBox "Python runtime missing. Please see docs/DESKTOP.md.", 48, "StyleMate"
+    MsgBox "Python runtime missing. Please see docs/guides/DESKTOP.md.", 48, "Travel Wardrobe Assistant"
     WScript.Quit 1
 End If
 command = Chr(34) & runtime & Chr(34) & " " & Chr(34) & base & "\desktop.py" & Chr(34)

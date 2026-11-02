@@ -26,6 +26,7 @@ from stylemate.domain.models import AgentTraceStep, ToolSpec
 from stylemate.rag.question import current_question
 
 _TOOL_DESCRIPTIONS = {
+    "deep_research": "对服饰与洗护问题检索公开官方来源，最多两次搜索、四页资料；资料未经人工审核，不自动入库。",
     "get_user_location": "获取当前用户所在城市；没有城市参数。",
     "get_weather": "查询指定城市的实时天气；城市为空时尝试定位。",
     "recommend_size": "根据身高、体重和版型偏好给出参考尺码。",
@@ -114,6 +115,9 @@ def build_toolkit(
         )
         for name, (handler, retry, validate) in read_handlers.items()
     ]
+    if getattr(settings, "agent_engine", "legacy") == "skills_graph":
+        from stylemate.research.workflow import deep_research
+        tools.append(_read_tool("deep_research", deep_research, READ_TOOL_SCHEMAS["deep_research"], False, False, executor, context))
     tools.extend(_write_tools(writes))
     return AgentToolkit(tools=tools, wardrobe=wardrobe_repository, context=context)
 
@@ -136,7 +140,7 @@ def _read_tool(
             ToolSpec(
                 name=name,
                 permission="read",
-                timeout_seconds=getattr(context.settings, "tool_timeout_seconds", 5),
+                timeout_seconds=30 if name == "deep_research" else getattr(context.settings, "tool_timeout_seconds", 5),
                 retry_once=retry_once,
                 validates_inventory_ids=validates_inventory,
                 arguments_model=arguments_model,
@@ -189,9 +193,16 @@ def _write_tools(writes: WriteActionToolkit) -> list[BaseTool]:
             denied = denied_tool_payload(name, writes.owner_id, writes.conversation_id)
             if denied:
                 return denied
+            from stylemate.agent.policy import current_policy
+            policy = current_policy()
+            if policy and policy.ledger and policy.pending_proposal:
+                return json.dumps({"result": {"message": "本轮已有变更预览，请先确认或取消。"},
+                                   "trace": {"name": name, "status": "failed", "summary": "multiple_write_proposals", "duration_ms": 0}})
             started = monotonic()
             try:
                 action = operation(plain_arguments(arguments))
+                if policy and policy.ledger:
+                    policy.pending_proposal = True
                 payload: dict[str, Any] = {
                     "pending_action": action.model_dump(mode="json"),
                     "result": {"operation": action.operation, "action_id": action.id},

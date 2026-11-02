@@ -23,6 +23,8 @@ class RuntimeSettings:
     weather_provider: str = "amap"
     weather_city: str = ""
     allow_ip_location: bool = False
+    agent_engine: str = "skills_graph"
+    memory_provider: str = "local"
 
     @property
     def dashscope_base_url(self) -> str:
@@ -55,4 +57,6 @@ class RuntimeSettings:
             weather_provider=os.getenv("WEATHER_PROVIDER", "amap"),
             weather_city=os.getenv("WEATHER_CITY", ""),
             allow_ip_location=os.getenv("ALLOW_IP_LOCATION", "0") == "1",
+            agent_engine=os.getenv("AGENT_ENGINE") or "skills_graph",
+            memory_provider=os.getenv("MEMORY_PROVIDER") or "local",
         )

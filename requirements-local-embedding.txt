@@ -1,0 +1,4 @@
+# Optional local CPU embedding profile; model weights are installed separately.
+# The standard portable package uses the existing configurable embedding service.
+-r requirements.txt
+sentence-transformers==5.3.0

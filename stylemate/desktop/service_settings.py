@@ -109,6 +109,18 @@ class ServiceSettingsDialog(QDialog):
         credit.setWordWrap(True)
         body.addWidget(credit)
         body.addStretch()
+        body = self.section("跨会话记忆")
+        form = QFormLayout()
+        self.memory_provider = ArrowComboBox()
+        self.memory_provider.addItem("本地 SQLite 长期记忆", "local")
+        self.memory_provider.addItem("关闭长期记忆", "disabled")
+        form.addRow("记忆服务", self.memory_provider)
+        body.addLayout(form)
+        explanation = QLabel("长期记忆保存在本机 SQLite 中，通过本地关键词检索召回已确认偏好、历史条件与服饰场景，无需 Mem0 账号或密钥。记忆检索不发送网络请求；使用远程对话模型时，召回的少量记忆会作为本轮上下文发给该模型。可在主窗口查看、删除或清空；当前明确条件优先于旧记忆。")
+        explanation.setWordWrap(True)
+        body.addWidget(explanation)
+        self.probe_button(body, "memory")
+        body.addStretch()
         self.message = QLabel("")
         self.message.setWordWrap(True)
         layout.addWidget(self.message)
@@ -133,6 +145,7 @@ class ServiceSettingsDialog(QDialog):
             field.textChanged.connect(self.invalidate_tests)
         self.weather_provider.currentIndexChanged.connect(self.invalidate_tests)
         self.allow_location.toggled.connect(self.invalidate_tests)
+        self.memory_provider.currentIndexChanged.connect(self.invalidate_tests)
 
     def invalidate_tests(self, *args):
         for result in self.results.values():
@@ -164,14 +177,17 @@ class ServiceSettingsDialog(QDialog):
         body.addWidget(result)
 
     def populate(self, values):
+        self.loaded_values = dict(values)
         for key, field in self.fields.items():
             field.setText(values.get(key, ""))
         self.weather_provider.setCurrentIndex(max(0, self.weather_provider.findData(values.get("WEATHER_PROVIDER", "amap"))))
         self.allow_location.setChecked(values.get("ALLOW_IP_LOCATION") == "1")
+        self.memory_provider.setCurrentIndex(max(0, self.memory_provider.findData(values.get("MEMORY_PROVIDER", "local"))))
 
     def values(self):
-        return validate_config(dict(DEFAULTS) | {key: field.text() for key, field in self.fields.items()} |
+        return validate_config(dict(DEFAULTS) | self.loaded_values | {key: field.text() for key, field in self.fields.items()} |
                                {"WEATHER_PROVIDER": self.weather_provider.currentData(),
+                                "MEMORY_PROVIDER": self.memory_provider.currentData(),
                                 "ALLOW_IP_LOCATION": "1" if self.allow_location.isChecked() else "0"})
 
     def copy_connection(self, prefix):
@@ -199,7 +215,7 @@ class ServiceSettingsDialog(QDialog):
                             if raw.get(name):
                                 imported[key] = raw[name]
                                 break
-                current = dict(DEFAULTS) | {key: field.text() for key, field in self.fields.items()}
+                current = self.values()
                 self.populate(current | imported)
                 self.message.setText("已导入到表单，检查后点击保存。")
             except Exception:

@@ -13,6 +13,8 @@ from stylemate.agent.tool_schemas import (
     WardrobeSearchArguments,
 )
 from stylemate.domain.models import OutfitRequest
+from stylemate.rag.question import current_question
+from stylemate.rules.constraints import extract_color_exclusions
 from stylemate.skills.outfit_planning import OutfitPlanningSkill
 
 
@@ -34,6 +36,18 @@ def get_garment(arguments: dict[str, Any], context: ToolContext) -> dict[str, An
 def recommend_inventory_outfit(arguments: dict[str, Any], context: ToolContext) -> dict[str, Any]:
     """Use the deterministic planner with inventory from this owner only."""
     values = OutfitArguments.model_validate(arguments)
+    question = current_question(context.owner_id, context.conversation_id) or context.question
+    if question:
+        text = question.original_query
+        exclusions = extract_color_exclusions(text)
+        exclusions.extend(term for term in ("不穿裙子", "不要裙子", "不穿高跟鞋", "不要高跟鞋") if term in text)
+        updates = {"extra_constraints": list(dict.fromkeys([*values.extra_constraints, *exclusions]))}
+        if question.garment_id:
+            updates["required_garment_id"] = question.garment_id
+        seasons = [season for season in "春夏秋冬" if season in text]
+        if len(seasons) == 1:
+            updates["target_season"] = seasons[0]
+        values = values.model_copy(update=updates)
     request = OutfitRequest(**values.model_dump())
     outcome = OutfitPlanningSkill(context.wardrobe_repository).run(context.owner_id, request)
     return {**outcome.data, "message": outcome.user_message}

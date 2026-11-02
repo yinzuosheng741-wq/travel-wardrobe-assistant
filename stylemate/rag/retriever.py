@@ -179,7 +179,10 @@ def create_chroma_client(mode: str = "demo", path: str = "data/chroma"):
     """Use the bundled exact-search backend everywhere; Chroma is explicit opt-in."""
     if mode not in {"demo", "local"}:
         raise ValueError("mode must be demo or local")
-    backend = os.getenv("STYLEMATE_VECTOR_BACKEND", "sqlite")
+    backend = os.getenv("STYLEMATE_VECTOR_BACKEND") or "sqlite"
+    if backend == "milvus":
+        from stylemate.rag.milvus_vectors import MilvusVectorClient, persistent_client
+        return MilvusVectorClient() if mode == "demo" else persistent_client(Path(path).parent / "milvus-v3")
     if backend == "sqlite":
         from stylemate.rag.portable_vectors import PortableVectorClient
         return PortableVectorClient(None if mode == "demo" else Path(path) / "portable-vectors.sqlite3")

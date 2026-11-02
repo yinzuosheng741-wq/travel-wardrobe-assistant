@@ -7,7 +7,7 @@ if exist "runtime\python.exe" (
 ) else if exist ".venv\Scripts\python.exe" (
   ".venv\Scripts\python.exe" desktop.py %*
 ) else (
-  echo Python runtime missing. See docs/DESKTOP.md.
+  echo Python runtime missing. See docs/guides/DESKTOP.md.
   pause
   exit /b 1
 )

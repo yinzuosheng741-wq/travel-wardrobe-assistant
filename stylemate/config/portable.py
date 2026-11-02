@@ -12,9 +12,11 @@ FIELDS = (
     "VISION_BASE_URL", "VISION_API_KEY", "VISION_MODEL_NAME",
     "EMBEDDING_BASE_URL", "EMBEDDING_API_KEY", "EMBEDDING_MODEL_NAME",
     "AMAP_API_KEY", "WEATHER_PROVIDER", "WEATHER_CITY", "ALLOW_IP_LOCATION",
+    "AGENT_ENGINE", "MEMORY_PROVIDER", "STYLEMATE_VECTOR_BACKEND",
 )
 DEFAULTS = dict.fromkeys(FIELDS, "") | {
     "LLM_PROVIDER": "openai-compatible", "WEATHER_PROVIDER": "amap", "ALLOW_IP_LOCATION": "0",
+    "AGENT_ENGINE": "skills_graph", "MEMORY_PROVIDER": "local", "STYLEMATE_VECTOR_BACKEND": "milvus",
 }
 
 
@@ -33,7 +35,7 @@ class ServiceConfigStore:
         # The portable file is authoritative, including explicitly empty keys.
         if self.path.is_file():
             saved = dotenv_values(self.path, interpolate=False)
-            values.update({key: saved.get(key) or "" for key in FIELDS})
+            values.update({key: saved.get(key, DEFAULTS[key]) or "" for key in FIELDS})
         else:
             for key in FIELDS:
                 values[key] = os.environ.get(key) or legacy.get(key) or values[key]
@@ -79,6 +81,10 @@ def validate_config(values):
         raise ValueError("请选择有效的天气服务。")
     if result["ALLOW_IP_LOCATION"] not in {"0", "1"}:
         raise ValueError("定位选项无效。")
+    for key, choices in {"AGENT_ENGINE": {"legacy", "skills_graph"}, "MEMORY_PROVIDER": {"local", "disabled"},
+                         "STYLEMATE_VECTOR_BACKEND": {"milvus", "sqlite", "chroma"}}.items():
+        if result[key] not in choices:
+            raise ValueError("无效的执行引擎、记忆服务或检索后端。")
     for prefix, model in [("LLM", "TEXT_MODEL_NAME"), ("VISION", "VISION_MODEL_NAME"), ("EMBEDDING", "EMBEDDING_MODEL_NAME")]:
         if result[prefix + "_API_KEY"] and not result[model]:
             raise ValueError("填写模型密钥后，请同时填写相应模型名称。")
@@ -90,7 +96,7 @@ def apply_environment(values):
     for alias in ("OPENAI_API_KEY", "DASHSCOPE_API_KEY", "GAODE_API_KEY", "OPENAI_BASE_URL", "DASHSCOPE_BASE_URL"):
         os.environ[alias] = ""
     for key in FIELDS:
-        os.environ[key] = values.get(key, "")
+        os.environ[key] = values.get(key, DEFAULTS[key])
 
 
 def public_template(values):

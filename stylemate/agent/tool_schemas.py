@@ -125,6 +125,7 @@ class DeleteGarmentArguments(StrictArguments):
 
 
 READ_TOOL_SCHEMAS: dict[str, type[BaseModel]] = {
+    "deep_research": RagSearchArguments,
     "get_user_location": EmptyArguments,
     "get_weather": WeatherArguments,
     "recommend_size": SizeArguments,

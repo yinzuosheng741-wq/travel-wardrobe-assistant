@@ -1,0 +1,16 @@
+version: 1
+output_rules: [preserve_care_boundaries, inventory_ids_must_exist, writes_require_confirmation]
+agents:
+  wardrobe_agent:
+    description: 衣物查询、分析与管理。修改只能生成待确认预览。
+    skills: [garment_management, size_reference, knowledge_search]
+    max_tool_calls: 3
+  outfit_agent:
+    description: 根据真实库存和明确条件提供穿搭、购买及出行建议。
+    skills: [garment_management, outfit_recommendation, size_reference, travel_planning, knowledge_search]
+    max_tool_calls: 3
+  knowledge_agent:
+    description: 根据原问题、所选衣物及可核验来源回答服饰知识与洗护问题。
+    skills: [knowledge_search, care_assessment, deep_research]
+    functions: [get_garment]
+    max_tool_calls: 3

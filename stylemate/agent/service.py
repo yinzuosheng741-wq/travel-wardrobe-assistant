@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
+import hashlib
 import re
 from datetime import datetime
+from threading import RLock
 from typing import Any
 
 from httpx import HTTPError
@@ -42,6 +44,7 @@ from stylemate.services.profile_service import PROFILE_KEYS, ProfileService
 
 NO_KEY_MESSAGE = "AI 对话需要配置 LLM_API_KEY；当前仍可使用天气、尺码、衣橱和知识库工具。"
 MODEL_FALLBACK_MESSAGE = "模型服务当前不可用；仍可使用天气、尺码、衣橱和知识库工具。"
+_CONVERSATION_LOCKS = [RLock() for _ in range(64)]
 
 
 
@@ -66,9 +69,17 @@ class AgentService:
         self.weather_client = weather_client
         self.profile_service = ProfileService(wardrobe_repository)
         self.observer = observer
+        self.long_term_memory = None
 
     def chat(self, owner_id: str, conversation_id: str, text: str, *, garment_id: str | None = None) -> ConversationMessage:
+        key = hashlib.sha256((owner_id + "\x1f" + conversation_id).encode()).digest()[0] % len(_CONVERSATION_LOCKS)
+        with _CONVERSATION_LOCKS[key]:
+            return self._chat_request(owner_id, conversation_id, text, garment_id=garment_id)
+
+    def _chat_request(self, owner_id: str, conversation_id: str, text: str, *, garment_id: str | None = None) -> ConversationMessage:
+        from stylemate.agent.budget import agent_scope
         from stylemate.agent.policy import request_policy
+        from stylemate.agent.skills_graph import primary_agent
         from stylemate.agent.tool_schemas import READ_TOOL_SCHEMAS, WRITE_TOOL_SCHEMAS
 
         if not isinstance(text, str) or not text.strip() or len(text) > 4000:
@@ -90,8 +101,10 @@ class AgentService:
         allowed = set(route.allowed_tools)
         if item_intent and requested_id:
             allowed.update({"get_garment", "care_guide", "recommend_inventory_outfit", "get_weather"})
-        with observe_run(self.observer) as observation:
-            with request_policy(owner_id, conversation_id, allowed) as policy, question_scope(
+        modern = self.settings.agent_engine == "skills_graph"
+        with observe_run(self.observer) as observation, agent_scope(primary_agent(text)):
+            with request_policy(owner_id, conversation_id, allowed, max_calls=9 if modern else 6,
+                                per_agent=3 if modern else None) as policy, question_scope(
                 QuestionContext(owner_id, conversation_id, text)
             ):
                 try:
@@ -114,6 +127,11 @@ class AgentService:
             content, traces, sources = "找到多件同名衣物，请先在衣橱中选择具体的单品。", [], []
         elif garment_id and _item_exclusion(text):
             content, traces, sources = "你提到不穿这件衣物；请取消选择后说明其他搭配需求，我不会把它作为必选单品。", [], []
+        elif self.model is not None and self.settings.agent_engine == "skills_graph" and self._compound(text):
+            selected = self.wardrobe_repository.get_garment(owner_id, garment_id) if garment_id else None
+            question = current_question(owner_id, conversation_id) or QuestionContext(owner_id, conversation_id, text)
+            with question_scope(question.for_garment(garment_id, selected.material or "") if selected else question):
+                content, traces, sources = self._model_reply(owner_id, conversation_id, text, state)
         elif garment_id and _item_question(text):
             content, traces, sources = self._selected_item_route(owner_id, conversation_id, text, garment_id)
         elif (_item_question(text) and re.search(r"这件|这条|这双|这个|它", text) and not garment_id
@@ -134,14 +152,7 @@ class AgentService:
             )
         else:
             try:
-                toolkit = self._toolkit(owner_id, conversation_id)
-                history = [HumanMessage(content=m.content) if m.role == "user" else AIMessage(content=m.content) for m in state.messages]
-                result = build_agent_graph(self.model, toolkit.tools).invoke(initial_state(text, owner_id=owner_id, conversation_id=conversation_id, facts=state.facts, summary=state.summary, app_mode=self.settings.app_mode, profile=self.profile_service.get(owner_id), messages=history))
-                latest = result["messages"][-1]
-                content = str(getattr(latest, "content", "") or "我暂时没有生成回复，请重试。")
-                traces = [_trace(item) for item in result.get("traces", [])]
-                sources = [_source(item) for item in result.get("sources", []) if _source(item) is not None]
-                sources = cited_sources(content, sources)
+                content, traces, sources = self._model_reply(owner_id, conversation_id, text, state)
             except (
                 RequestExecutionDenied,
                 APIError,
@@ -179,6 +190,28 @@ class AgentService:
         saved_text = f"{text.strip()}\n【关联衣物：{selected.name}】" if selected else text.strip()
         self._save_turn(state, saved_text, reply)
         return reply
+
+    @staticmethod
+    def _compound(text):
+        from stylemate.agent.skills_graph import compound_roles
+        return bool(compound_roles(text))
+
+    def _model_reply(self, owner_id, conversation_id, text, state):
+        from stylemate.agent.skills_graph import build_skills_graph
+        toolkit = self._toolkit(owner_id, conversation_id)
+        history = [HumanMessage(content=m.content) if m.role == "user" else AIMessage(content=m.content)
+                   for m in state.messages[-10:]]
+        inputs = initial_state(text, owner_id=owner_id, conversation_id=conversation_id, facts=state.facts,
+                               summary=state.summary, app_mode=self.settings.app_mode,
+                               profile=self.profile_service.get(owner_id), messages=history)
+        if self.long_term_memory:
+            inputs["personal_memories"] = self.long_term_memory.search(owner_id, text)
+        builder = build_skills_graph if self.settings.agent_engine == "skills_graph" else build_agent_graph
+        result = builder(self.model, toolkit.tools).invoke(inputs)
+        content = str(result["messages"][-1].content or "我暂时没有生成回复，请重试。")
+        traces = [_trace(item) for item in result.get("traces", [])]
+        sources = [_source(item) for item in result.get("sources", []) if _source(item) is not None]
+        return content, traces, cited_sources(content, sources)
 
     def _shortcut_route(
         self,
@@ -576,7 +609,7 @@ class AgentService:
         messages = [*state.messages, user_message, reply]
         facts = migrate_legacy_summary(state.facts, state.summary)
         facts = update_conversation_facts(facts, user_message)
-        while len(messages) > 8:
+        while len(messages) > 10:
             messages.pop(0)
         self.repository.save_conversation(
             ConversationState(
@@ -588,6 +621,14 @@ class AgentService:
                 summary="",
             )
         )
+        if self.long_term_memory:
+            try:
+                self.long_term_memory.enqueue(state.owner_id, reply.run_id or reply.id,
+                                              self.profile_service.get(state.owner_id),
+                                              update_conversation_facts(ConversationState(owner_id=state.owner_id, conversation_id=state.conversation_id).facts, user_message))
+            except Exception:
+                # An auxiliary memory failure must not roll back a local turn.
+                self.long_term_memory.status = "storage_unavailable"
 
 
 def _displayed_evidence(result: dict[str, Any]) -> list[dict[str, Any]]:
