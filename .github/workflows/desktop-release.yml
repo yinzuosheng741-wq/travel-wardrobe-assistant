@@ -23,10 +23,11 @@ jobs:
             requirements-common.txt
             requirements-desktop.txt
             portable-lock.txt
-      - run: python -m pip install -r requirements-desktop.txt -c portable-lock.txt pyinstaller==6.11.1
-      - run: python -m pip check
-      - run: python desktop.py --check
-      - run: python scripts/build_desktop.py
+      - run: python -m venv .venv
+      - run: .venv/Scripts/python.exe -m pip install -r requirements-desktop.txt -c portable-lock.txt pyinstaller==6.11.1
+      - run: .venv/Scripts/python.exe -m pip check
+      - run: .venv/Scripts/python.exe desktop.py --check
+      - run: .venv/Scripts/python.exe scripts/build_desktop.py
       - uses: actions/upload-artifact@v4
         with:
           name: TravelWardrobeAssistant-Windows

@@ -25,8 +25,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: python -m pip install -r requirements-desktop.txt -c portable-lock.txt
-      - run: python -m pip check
-      - run: python -m compileall -q stylemate desktop.py
-      - run: python desktop.py --check
-      - run: python desktop.py --no-ui
+      - run: python -m venv .venv
+      - run: .venv/Scripts/python.exe -m pip install -r requirements-desktop.txt -c portable-lock.txt
+      - run: .venv/Scripts/python.exe -m pip check
+      - run: .venv/Scripts/python.exe -m compileall -q stylemate desktop.py
+      - run: .venv/Scripts/python.exe desktop.py --check
+      - run: .venv/Scripts/python.exe desktop.py --no-ui
